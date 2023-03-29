@@ -13,6 +13,11 @@ import pocketyacsa.server.common.exception.handler.CommonResponse;
 @RequiredArgsConstructor
 public class LoginController {
 
+  /**
+   * 로그인 성공시 redirect되는 url입니다.
+   *
+   * @return 로그인 성공 메시지
+   */
   @GetMapping("/login-success")
   public ResponseEntity<Object> loginSuccess() {
     CommonResponse response =
@@ -20,6 +25,11 @@ public class LoginController {
     return new ResponseEntity<>(response, response.getHttpStatus());
   }
 
+  /**
+   * 로그아웃 성공시 redirect되는 url입니다.
+   *
+   * @return 로그아웃 성공 메시지
+   */
   @GetMapping("/logout-success")
   public ResponseEntity<Object> logoutSuccess() {
     CommonResponse response =

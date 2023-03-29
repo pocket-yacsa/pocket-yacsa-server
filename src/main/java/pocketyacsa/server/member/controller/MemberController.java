@@ -16,6 +16,11 @@ public class MemberController {
 
   private final MemberService memberService;
 
+  /**
+   * 회원탈퇴를 진행합니다.
+   *
+   * @return 회원탈퇴 성공 메시지
+   */
   @DeleteMapping
   public ResponseEntity<Object> delete() {
     memberService.delete();
