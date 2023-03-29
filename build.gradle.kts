@@ -22,9 +22,11 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.data:spring-data-jpa:3.0.4")
-    implementation("org.springframework.security.oauth:spring-security-oauth2:2.5.2.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("mysql:mysql-connector-java:8.0.27")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.session:spring-session-data-redis")
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
