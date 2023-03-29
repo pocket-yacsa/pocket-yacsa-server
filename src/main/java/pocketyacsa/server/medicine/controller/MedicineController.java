@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pocketyacsa.server.medicine.entity.Medicine;
+import pocketyacsa.server.medicine.entity.dto.MedicineDto;
 import pocketyacsa.server.medicine.service.MedicineService;
 
 @RestController
@@ -22,8 +22,8 @@ public class MedicineController {
    * @return 특정 id의 medicine
    */
   @GetMapping("/id/{id}")
-  public Medicine getMedicineById(@PathVariable int id) {
-    Medicine medicine = medicineService.getMedicineById(id);
+  public MedicineDto getMedicineById(@PathVariable int id) {
+    MedicineDto medicine = medicineService.getMedicineDtoById(id);
     return medicine;
   }
 
@@ -34,8 +34,8 @@ public class MedicineController {
    * @return 특정 code의 medicine
    */
   @GetMapping("/code/{code}")
-  public Medicine getMedicineByCode(@PathVariable String code) {
-    Medicine medicine = medicineService.getMedicineByCode(code);
+  public MedicineDto getMedicineByCode(@PathVariable String code) {
+    MedicineDto medicine = medicineService.getMedicineDtoByCode(code);
     return medicine;
   }
 }
