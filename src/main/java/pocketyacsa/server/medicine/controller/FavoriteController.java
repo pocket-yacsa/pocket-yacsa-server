@@ -1,9 +1,11 @@
 package pocketyacsa.server.medicine.controller;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -45,5 +47,19 @@ public class FavoriteController {
   public FavoriteDto getFavoriteById(@PathVariable int id) {
     FavoriteDto favorite = favoriteService.getFavoriteDtoById(id);
     return favorite;
+  }
+
+  /**
+   * 특정 id의 favorite을 삭제합니다.
+   *
+   * @param favoriteId 삭제할 favorite의 id
+   * @return favorite 삭제 성공 여부
+   */
+  @DeleteMapping
+  public ResponseEntity<Object> delete(@RequestParam int favoriteId) {
+    favoriteService.delete(favoriteId);
+    CommonResponse response =
+        new CommonResponse("DELETE_FAVORITE_SUCCESS", OK, "즐겨찾기 삭제 성공");
+    return new ResponseEntity<>(response, response.getHttpStatus());
   }
 }

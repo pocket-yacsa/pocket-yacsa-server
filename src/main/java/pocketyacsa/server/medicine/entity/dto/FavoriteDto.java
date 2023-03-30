@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import pocketyacsa.server.medicine.entity.Medicine;
 
 @Getter
 @Builder
@@ -17,5 +18,5 @@ public class FavoriteDto {
 
   private int memberId;
 
-  private int medicineId;
+  private Medicine medicine;
 }

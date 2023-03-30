@@ -63,7 +63,7 @@ class FavoriteServiceTest {
   FavoriteDto favoriteDto = FavoriteDto.builder()
       .id(1)
       .memberId(1)
-      .medicineId(1)
+      .medicine(medicine)
       .build();
 
   @Test
@@ -158,5 +158,43 @@ class FavoriteServiceTest {
     boolean result = favoriteService.existsByMemberIdAndMedicineId(1, 1);
 
     assertEquals(result, false);
+  }
+
+  @Test
+  public void delete_Success() {
+    when(favoriteRepository.findById(1)).thenReturn(Optional.ofNullable(favorite));
+    when(memberService.getLoginMember()).thenReturn(member);
+
+    favoriteService.delete(1);
+
+    verify(favoriteRepository).deleteById(1);
+  }
+
+  @Test
+  public void delete_NotExistFavorite() {
+    when(favoriteRepository.findById(1)).thenReturn(Optional.empty());
+
+    assertThrows(BadRequestException.class, () -> favoriteService.delete(1));
+  }
+
+  @Test
+  public void delete_NotMyFavorite() {
+    Member otherMember = Member.builder()
+        .id(2)
+        .name("kim")
+        .email("kim@yacsa.com")
+        .picture("picture-url")
+        .deleted(false).build();
+
+    Favorite otherFavorite = Favorite.builder()
+        .id(2)
+        .member(otherMember)
+        .medicine(medicine)
+        .build();
+
+    when(favoriteRepository.findById(2)).thenReturn(Optional.ofNullable(otherFavorite));
+    when(memberService.getLoginMember()).thenReturn(member);
+
+    assertThrows(BadRequestException.class, () -> favoriteService.delete(2));
   }
 }

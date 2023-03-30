@@ -29,6 +29,6 @@ public class Favorite extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   private Member member;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   private Medicine medicine;
 }
