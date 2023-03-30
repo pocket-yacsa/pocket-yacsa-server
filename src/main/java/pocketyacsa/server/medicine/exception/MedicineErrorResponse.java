@@ -14,7 +14,7 @@ import pocketyacsa.server.common.exception.handler.ErrorResponse;
 public enum MedicineErrorResponse {
 
   // 403 FORBIDDEN
-  FAVORITE_NO_PERMISSION(of("FAVORITE_NO_PERMISSION", FORBIDDEN, "즐겨찾기를 조회할 권한이 없습니다.")),
+  FAVORITE_NO_PERMISSION(of("FAVORITE_NO_PERMISSION", FORBIDDEN, "즐겨찾기에 권한이 없습니다.")),
 
   // 404 NOT_FOUND
   MEDICINE_NOT_EXIST(of("MEDICINE_NOT_EXIST", NOT_FOUND, "의약품이 존재하지 않습니다.")),

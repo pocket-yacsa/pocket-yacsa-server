@@ -78,7 +78,7 @@ public class FavoriteService {
     FavoriteDto favoriteDto = FavoriteDto.builder()
         .id(favorite.getId())
         .memberId(favorite.getMember().getId())
-        .medicineId(favorite.getMedicine().getId())
+        .medicine(favorite.getMedicine())
         .build();
 
     return favoriteDto;
@@ -93,5 +93,16 @@ public class FavoriteService {
    */
   public boolean existsByMemberIdAndMedicineId(int memberId, int medicineId) {
     return repository.existsByMemberIdAndMedicineId(memberId, medicineId);
+  }
+
+  /**
+   * favorite을 삭제합니다.
+   *
+   * @param id 삭제할 favorite의 id
+   */
+  public void delete(int id) {
+    FavoriteDto favoriteDto = getFavoriteDtoById(id);
+
+    repository.deleteById(favoriteDto.getId());
   }
 }
