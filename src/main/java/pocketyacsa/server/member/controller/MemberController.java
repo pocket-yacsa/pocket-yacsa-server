@@ -1,7 +1,8 @@
 package pocketyacsa.server.member.controller;
 
+import static org.springframework.http.HttpStatus.OK;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,7 +26,7 @@ public class MemberController {
   public ResponseEntity<Object> delete() {
     memberService.delete();
     CommonResponse response =
-        new CommonResponse("DELETE_SUCCESS", HttpStatus.OK, "회원정보 삭제 성공");
+        new CommonResponse("DELETE_SUCCESS", OK, "회원정보 삭제 성공");
     return new ResponseEntity<>(response, response.getHttpStatus());
   }
 }
