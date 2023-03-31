@@ -193,8 +193,9 @@ class FavoriteServiceTest {
       favorites.add(fav);
     }
     for (int i = 1; i <= pageSize; i++) {
-      favoriteReses.add(FavoriteRes.builder().id(i).memberId(member.getId()).medicineName("a")
-          .medicineCompany("a").createdAt(time).build());
+      favoriteReses.add(
+          FavoriteRes.builder().id(i).memberId(member.getId()).medicineId(i).medicineName("a")
+              .medicineCompany("a").createdAt(time).build());
     }
 
     when(memberService.getLoginMember()).thenReturn(member);
@@ -224,8 +225,9 @@ class FavoriteServiceTest {
       favorites.add(fav);
     }
     for (int i = 7; i <= count; i++) {
-      favoriteReses.add(FavoriteRes.builder().id(i).memberId(member.getId()).medicineName("a")
-          .medicineCompany("a").createdAt(time).build());
+      favoriteReses.add(
+          FavoriteRes.builder().id(i).memberId(member.getId()).medicineId(i).medicineName("a")
+              .medicineCompany("a").createdAt(time).build());
     }
 
     when(memberService.getLoginMember()).thenReturn(member);
