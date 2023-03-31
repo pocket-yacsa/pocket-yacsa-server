@@ -87,6 +87,9 @@ public class DetectionLogService {
     int totalSize = repository.countByMemberId(loginMember.getId());
     int totalPages = (int) Math.ceil((double) totalSize / pageSize);
 
+    if (totalSize == 0) {
+      throw new BadRequestException(DETECTION_LOG_NOT_EXIST.getErrorResponse());
+    }
     if (page < 1 || page > totalPages) {
       throw new BadRequestException(PAGE_OUT_OF_RANGE.getErrorResponse());
     }

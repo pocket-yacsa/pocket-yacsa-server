@@ -254,4 +254,13 @@ class DetectionLogServiceTest {
 
     assertThrows(BadRequestException.class, () -> detectionLogService.getDetectionLogsByPage(page));
   }
+  @Test
+  public void getDetectionLogsByPage_DataNotExist() {
+    int page = 1;
+
+    when(memberService.getLoginMember()).thenReturn(member);
+    when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(0);
+
+    assertThrows(BadRequestException.class, () -> detectionLogService.getDetectionLogsByPage(page));
+  }
 }

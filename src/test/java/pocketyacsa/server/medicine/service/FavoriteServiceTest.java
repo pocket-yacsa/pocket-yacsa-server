@@ -282,4 +282,14 @@ class FavoriteServiceTest {
 
     assertThrows(BadRequestException.class, () -> favoriteService.getFavoritesByPage(page));
   }
+
+  @Test
+  public void getFavoritesByPage_DataNotExist() {
+    int page = 1;
+
+    when(memberService.getLoginMember()).thenReturn(member);
+    when(favoriteRepository.countByMemberId(member.getId())).thenReturn(0);
+
+    assertThrows(BadRequestException.class, () -> favoriteService.getFavoritesByPage(page));
+  }
 }
