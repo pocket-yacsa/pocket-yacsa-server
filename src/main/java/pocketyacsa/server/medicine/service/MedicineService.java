@@ -8,8 +8,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pocketyacsa.server.common.exception.BadRequestException;
-import pocketyacsa.server.medicine.entity.Medicine;
-import pocketyacsa.server.medicine.entity.dto.MedicineDto;
+import pocketyacsa.server.medicine.domain.entity.Medicine;
+import pocketyacsa.server.medicine.domain.response.MedicineRes;
 import pocketyacsa.server.medicine.repository.MedicineRepository;
 
 @Service
@@ -65,10 +65,10 @@ public class MedicineService {
    * @param id medicine의 id
    * @return
    */
-  public MedicineDto getMedicineDtoById(int id) {
+  public MedicineRes getMedicineDtoById(int id) {
     Medicine medicine = getMedicineById(id);
 
-    MedicineDto medicineDto = MedicineDto.builder()
+    MedicineRes medicineDto = MedicineRes.builder()
         .id(medicine.getId())
         .code(medicine.getCode())
         .name(medicine.getName())
@@ -89,10 +89,10 @@ public class MedicineService {
    * @param code medicine의 code
    * @return
    */
-  public MedicineDto getMedicineDtoByCode(String code) {
+  public MedicineRes getMedicineDtoByCode(String code) {
     Medicine medicine = getMedicineByCode(code);
 
-    MedicineDto medicineDto = MedicineDto.builder()
+    MedicineRes medicineDto = MedicineRes.builder()
         .id(medicine.getId())
         .code(medicine.getCode())
         .name(medicine.getName())

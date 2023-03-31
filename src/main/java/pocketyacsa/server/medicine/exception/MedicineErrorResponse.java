@@ -1,5 +1,6 @@
 package pocketyacsa.server.medicine.exception;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -12,6 +13,9 @@ import pocketyacsa.server.common.exception.handler.ErrorResponse;
 @Getter
 @AllArgsConstructor
 public enum MedicineErrorResponse {
+
+  // 400 BAD_REQUEST
+  FAVORITE_PAGE_OUT_OF_RANGE(of("FAVORITE_PAGE_OUT_OF_RANGE", BAD_REQUEST, "페이지 범위를 벗어납니다.")),
 
   // 403 FORBIDDEN
   FAVORITE_NO_PERMISSION(of("FAVORITE_NO_PERMISSION", FORBIDDEN, "즐겨찾기에 권한이 없습니다.")),

@@ -3,6 +3,7 @@ package pocketyacsa.server.medicine.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pocketyacsa.server.common.exception.handler.CommonResponse;
-import pocketyacsa.server.medicine.entity.dto.FavoriteDto;
+import pocketyacsa.server.medicine.domain.response.FavoriteRes;
 import pocketyacsa.server.medicine.service.FavoriteService;
 
 @RestController
@@ -24,7 +25,7 @@ public class FavoriteController {
   private final FavoriteService favoriteService;
 
   /**
-   * 특정 medicie을 즐겨찾기에 추가합니다.
+   * 특정 medicine을 즐겨찾기에 추가합니다.
    *
    * @param medicineId 즐겨찾기에 추가할 medicine의 id
    * @return 즐겨찾기 추가 성공여부 메시지
@@ -35,18 +36,6 @@ public class FavoriteController {
     CommonResponse response =
         new CommonResponse("SAVE_FAVORITE_SUCCESS", CREATED, "즐겨찾기 추가 성공");
     return new ResponseEntity<>(response, response.getHttpStatus());
-  }
-
-  /**
-   * 특정 id의 favorite을 반환합니다.
-   *
-   * @param id favorite의 id
-   * @return 특정 id의 favorite
-   */
-  @GetMapping("/id/{id}")
-  public FavoriteDto getFavoriteById(@PathVariable int id) {
-    FavoriteDto favorite = favoriteService.getFavoriteDtoById(id);
-    return favorite;
   }
 
   /**
@@ -61,5 +50,16 @@ public class FavoriteController {
     CommonResponse response =
         new CommonResponse("DELETE_FAVORITE_SUCCESS", OK, "즐겨찾기 삭제 성공");
     return new ResponseEntity<>(response, response.getHttpStatus());
+  }
+
+  /**
+   * 내 서랍에 출력할 favorite들을 페이지 단위로 반환합니다.
+   *
+   * @param page 페이지 수
+   * @return 페이지에 존재하는 모든 favoriteRes
+   */
+  @GetMapping("page/{page}")
+  public List<FavoriteRes> getFavoritesByPage(@PathVariable int page) {
+    return favoriteService.getFavoritesByPage(page);
   }
 }
