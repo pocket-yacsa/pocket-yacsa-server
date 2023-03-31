@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.entity.DetectionLog;
 import pocketyacsa.server.medicine.domain.entity.Medicine;
@@ -74,6 +75,21 @@ public class DetectionLogService {
     }
 
     repository.deleteById(detectionLog.getId());
+  }
+
+  /**
+   * 로그인한 사용자의 detectionLog를 모두 삭제합니다.
+   */
+  @Transactional
+  public void deleteAll() {
+    Member loginMember = memberService.getLoginMember();
+    int count = repository.countByMemberId(loginMember.getId());
+
+    if (count == 0) {
+      throw new BadRequestException(DETECTION_LOG_NOT_EXIST.getErrorResponse());
+    }
+
+    repository.deleteByMemberId(loginMember.getId());
   }
 
   /**

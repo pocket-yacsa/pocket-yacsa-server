@@ -53,6 +53,19 @@ public class FavoriteController {
   }
 
   /**
+   * 로그인한 사용자의 모든 favorite을 삭제합니다.
+   *
+   * @return favorite 삭제 성공 여부
+   */
+  @DeleteMapping("/all")
+  public ResponseEntity<Object> deleteAll() {
+    favoriteService.deleteAll();
+    CommonResponse response =
+        new CommonResponse("DELETE_FAVORITE_SUCCESS", OK, "즐겨찾기 삭제 성공");
+    return new ResponseEntity<>(response, response.getHttpStatus());
+  }
+
+  /**
    * 내 서랍에 출력할 favorite들을 페이지 단위로 반환합니다.
    *
    * @param page 페이지 수
