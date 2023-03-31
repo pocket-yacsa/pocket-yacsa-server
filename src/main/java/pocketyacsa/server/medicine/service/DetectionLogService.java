@@ -126,4 +126,14 @@ public class DetectionLogService {
 
     return detectionLogResList;
   }
+
+  /**
+   * 로그인한 사용자의 detectionLog의 개수를 반환합니다.
+   *
+   * @return 로그인한 사용자의 detectionLog의 개수
+   */
+  public int getDetectionLogCount() {
+    Member loginMember = memberService.getLoginMember();
+    return repository.countByMemberId(loginMember.getId());
+  }
 }

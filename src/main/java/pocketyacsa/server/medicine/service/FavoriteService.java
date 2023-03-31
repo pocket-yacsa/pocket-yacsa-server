@@ -144,4 +144,14 @@ public class FavoriteService {
 
     return favoriteResList;
   }
+
+  /**
+   * 로그인한 사용자의 즐겨찾기 개수를 반환합니다.
+   *
+   * @return 로그인한 사용자의 즐겨찾기 개수
+   */
+  public int getFavoriteCount() {
+    Member loginMember = memberService.getLoginMember();
+    return repository.countByMemberId(loginMember.getId());
+  }
 }

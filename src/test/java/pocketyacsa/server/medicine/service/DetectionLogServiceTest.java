@@ -281,4 +281,14 @@ class DetectionLogServiceTest {
 
     assertThrows(BadRequestException.class, () -> detectionLogService.getDetectionLogsByPage(page));
   }
+
+  @Test
+  public void getDetectionLogCount_Success() {
+    when(memberService.getLoginMember()).thenReturn(member);
+    when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(10);
+
+    int result = detectionLogService.getDetectionLogCount();
+
+    assertEquals(result, 10);
+  }
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ public class DetectionLogController {
    * @param medicineId 촬영기록에 추가할 medicine의 id
    * @return 즐겨찾기 추가 성공여부 메시지
    */
-  @GetMapping
+  @PostMapping
   public ResponseEntity<Object> save(@RequestParam int medicineId) {
     detectionLogService.save(medicineId);
     CommonResponse response =
