@@ -1,18 +1,15 @@
-package pocketyacsa.server.medicine.entity;
+package pocketyacsa.server.medicine.domain.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pocketyacsa.server.common.entity.BaseEntity;
-import pocketyacsa.server.member.entity.Member;
 
 @Entity
 @Getter
@@ -20,15 +17,25 @@ import pocketyacsa.server.member.entity.Member;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Favorite extends BaseEntity {
+public class Medicine extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  private Member member;
+  private String code;
 
-  @ManyToOne
-  private Medicine medicine;
+  private String name;
+
+  private String company;
+
+  private String ingredient;
+
+  private String image;
+
+  private String effect;
+
+  private String usages;
+
+  private String precautions;
 }

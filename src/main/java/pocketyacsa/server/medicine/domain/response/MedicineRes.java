@@ -1,26 +1,19 @@
-package pocketyacsa.server.medicine.entity;
+package pocketyacsa.server.medicine.domain.response;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pocketyacsa.server.common.entity.BaseEntity;
 
-@Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class Medicine extends BaseEntity {
+public class MedicineRes {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
   private String code;
@@ -29,7 +22,7 @@ public class Medicine extends BaseEntity {
 
   private String company;
 
-  private String ingredient;
+  private List<String> ingredient;
 
   private String image;
 

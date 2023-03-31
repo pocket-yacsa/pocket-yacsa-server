@@ -13,8 +13,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pocketyacsa.server.common.exception.BadRequestException;
-import pocketyacsa.server.medicine.entity.Medicine;
-import pocketyacsa.server.medicine.entity.dto.MedicineDto;
+import pocketyacsa.server.medicine.domain.entity.Medicine;
+import pocketyacsa.server.medicine.domain.response.MedicineRes;
 import pocketyacsa.server.medicine.repository.MedicineRepository;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,7 +27,7 @@ class MedicineServiceTest {
   MedicineService medicineService;
 
   Medicine medicine;
-  MedicineDto medicineDto;
+  MedicineRes medicineDto;
   List<String> ingredientList;
 
   @BeforeEach
@@ -46,7 +46,7 @@ class MedicineServiceTest {
 
     ingredientList = List.of("apple", "banana", "strawberry");
 
-    medicineDto = MedicineDto.builder()
+    medicineDto = MedicineRes.builder()
         .id(medicine.getId())
         .code(medicine.getCode())
         .name(medicine.getName())
@@ -103,7 +103,7 @@ class MedicineServiceTest {
   public void getMedicineDtoById_Success() {
     Mockito.when(medicineRepository.findById(1)).thenReturn(Optional.ofNullable(medicine));
 
-    MedicineDto result = medicineService.getMedicineDtoById(1);
+    MedicineRes result = medicineService.getMedicineDtoById(1);
 
     assertEquals(result, medicineDto);
   }
@@ -120,7 +120,7 @@ class MedicineServiceTest {
     Mockito.when(medicineRepository.findByCode("1234512345"))
         .thenReturn(Optional.ofNullable(medicine));
 
-    MedicineDto result = medicineService.getMedicineDtoByCode("1234512345");
+    MedicineRes result = medicineService.getMedicineDtoByCode("1234512345");
 
     assertEquals(result, medicineDto);
   }
