@@ -310,4 +310,14 @@ class FavoriteServiceTest {
 
     assertThrows(BadRequestException.class, () -> favoriteService.getFavoritesByPage(page));
   }
+
+  @Test
+  public void getFavoriteCount_Success() {
+    when(memberService.getLoginMember()).thenReturn(member);
+    when(favoriteRepository.countByMemberId(member.getId())).thenReturn(10);
+
+    int result = favoriteService.getFavoriteCount();
+
+    assertEquals(result, 10);
+  }
 }
