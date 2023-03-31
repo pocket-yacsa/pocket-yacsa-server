@@ -12,4 +12,6 @@ public interface DetectionLogRepository extends JpaRepository<DetectionLog, Inte
   int countByMemberId(int memberId);
 
   List<DetectionLog> findByMemberId(int memberId, PageRequest pageable);
+
+  void deleteByMemberId(int memberId);
 }

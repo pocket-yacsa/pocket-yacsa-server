@@ -33,7 +33,7 @@ public class DetectionLogController {
   public ResponseEntity<Object> save(@RequestParam int medicineId) {
     detectionLogService.save(medicineId);
     CommonResponse response =
-        new CommonResponse("SAVE_DETECTION_LOG_SUCCESS", CREATED, "즐겨찾기 추가 성공");
+        new CommonResponse("SAVE_DETECTION_LOG_SUCCESS", CREATED, "촬영기록 추가 성공");
     return new ResponseEntity<>(response, response.getHttpStatus());
   }
 
@@ -47,7 +47,20 @@ public class DetectionLogController {
   public ResponseEntity<Object> delete(@RequestParam int detectionLogId) {
     detectionLogService.delete(detectionLogId);
     CommonResponse response =
-        new CommonResponse("DELETE_DETECTION_LOG_SUCCESS", OK, "즐겨찾기 삭제 성공");
+        new CommonResponse("DELETE_DETECTION_LOG_SUCCESS", OK, "촬영기록 삭제 성공");
+    return new ResponseEntity<>(response, response.getHttpStatus());
+  }
+
+  /**
+   * 로그인한 사용자의 모든 detectionLog를 삭제합니다.
+   *
+   * @return detectionLog 삭제 성공 여부
+   */
+  @DeleteMapping("/all")
+  public ResponseEntity<Object> deleteAll() {
+    detectionLogService.deleteAll();
+    CommonResponse response =
+        new CommonResponse("DELETE_DETECTION_LOG_SUCCESS", OK, "촬영기록 삭제 성공");
     return new ResponseEntity<>(response, response.getHttpStatus());
   }
 

@@ -178,6 +178,24 @@ class FavoriteServiceTest {
   }
 
   @Test
+  public void deleteAll_Success() {
+    when(memberService.getLoginMember()).thenReturn(member);
+    when(favoriteRepository.countByMemberId(member.getId())).thenReturn(10);
+
+    favoriteService.deleteAll();
+
+    verify(favoriteRepository).deleteByMemberId(member.getId());
+  }
+
+  @Test
+  public void deleteAll_NotExist() {
+    when(memberService.getLoginMember()).thenReturn(member);
+    when(favoriteRepository.countByMemberId(member.getId())).thenReturn(0);
+
+    assertThrows(BadRequestException.class, () -> favoriteService.deleteAll());
+  }
+
+  @Test
   public void getFavoritesByPage_ReturnFirstPage() {
     int page = 1;
     int count = pageSize + 1;

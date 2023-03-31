@@ -14,4 +14,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Integer> {
   int countByMemberId(int memberId);
 
   List<Favorite> findByMemberId(int memberId, PageRequest pageable);
+
+  void deleteByMemberId(int memberId);
 }

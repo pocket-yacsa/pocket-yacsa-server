@@ -129,6 +129,24 @@ class DetectionLogServiceTest {
   }
 
   @Test
+  public void deleteAll_Success() {
+    when(memberService.getLoginMember()).thenReturn(member);
+    when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(10);
+
+    detectionLogService.deleteAll();
+
+    verify(detectionLogRepository).deleteByMemberId(member.getId());
+  }
+
+  @Test
+  public void deleteAll_NotExist() {
+    when(memberService.getLoginMember()).thenReturn(member);
+    when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(0);
+
+    assertThrows(BadRequestException.class, () -> detectionLogService.deleteAll());
+  }
+
+  @Test
   public void delete_NotMyDetectionLog() {
     Member otherMember = Member.builder()
         .id(2)
