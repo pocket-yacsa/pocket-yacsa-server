@@ -37,7 +37,7 @@ class MedicineServiceTest {
         .code("1234512345")
         .name("medicine")
         .company("jetbrains")
-        .ingredient("apple/banana/strawberry")
+        .ingredient("apple|banana|strawberry")
         .image("www.naver.com")
         .effect("make you stronger")
         .usages("once a week")
