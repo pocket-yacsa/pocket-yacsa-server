@@ -55,7 +55,7 @@ public class MedicineService {
    * @return ingredient를 종류별로 저장하는 List
    */
   public List<String> getIngredientList(String ingredient) {
-    List<String> list = Arrays.asList(ingredient.split("/"));
+    List<String> list = Arrays.asList(ingredient.split("\\|"));
     return list;
   }
 
