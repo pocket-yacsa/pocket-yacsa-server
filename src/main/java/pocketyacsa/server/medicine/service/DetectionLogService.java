@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.entity.DetectionLog;
 import pocketyacsa.server.medicine.domain.entity.Medicine;
+import pocketyacsa.server.medicine.domain.response.DetectionLogPageRes;
 import pocketyacsa.server.medicine.domain.response.DetectionLogRes;
 import pocketyacsa.server.medicine.repository.DetectionLogRepository;
 import pocketyacsa.server.member.entity.Member;
@@ -98,7 +99,7 @@ public class DetectionLogService {
    * @param page 페이지 수
    * @return 특정 page의 detectionLog 응답목록
    */
-  public List<DetectionLogRes> getDetectionLogsByPage(int page) {
+  public DetectionLogPageRes getDetectionLogsByPage(int page) {
     Member loginMember = memberService.getLoginMember();
     int totalSize = repository.countByMemberId(loginMember.getId());
     int totalPages = (int) Math.ceil((double) totalSize / pageSize);
@@ -116,15 +117,24 @@ public class DetectionLogService {
     List<DetectionLogRes> detectionLogResList = detectionLogs.stream()
         .map(detectionLog -> DetectionLogRes.builder()
             .id(detectionLog.getId())
-            .memberId(detectionLog.getMember().getId())
             .medicineId(detectionLog.getMedicine().getId())
             .medicineName(detectionLog.getMedicine().getName())
             .medicineCompany(detectionLog.getMedicine().getCompany())
+            .medicineImage(detectionLog.getMedicine().getImage())
             .createdAt(detectionLog.getCreatedAt())
             .build())
         .collect(Collectors.toList());
 
-    return detectionLogResList;
+    boolean isLastPage = (page == totalPages) ? true : false;
+
+    DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
+        .memberId(loginMember.getId())
+        .page(page)
+        .lastPage(isLastPage)
+        .detectionLogs(detectionLogResList)
+        .build();
+
+    return detectionLogPageRes;
   }
 
   /**

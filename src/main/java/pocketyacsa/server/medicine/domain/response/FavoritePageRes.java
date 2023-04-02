@@ -1,6 +1,6 @@
 package pocketyacsa.server.medicine.domain.response;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -12,17 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
-public class FavoriteRes {
+public class FavoritePageRes {
 
-  private int id;
+  private int memberId;
 
-  private int medicineId;
+  private int page;
 
-  private String medicineName;
+  private boolean lastPage;
 
-  private String medicineCompany;
-
-  private String medicineImage;
-
-  private LocalDateTime createdAt;
+  private List<FavoriteRes> favorites;
 }

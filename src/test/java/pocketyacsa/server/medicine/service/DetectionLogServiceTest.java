@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.entity.DetectionLog;
 import pocketyacsa.server.medicine.domain.entity.Medicine;
+import pocketyacsa.server.medicine.domain.response.DetectionLogPageRes;
 import pocketyacsa.server.medicine.domain.response.DetectionLogRes;
 import pocketyacsa.server.medicine.repository.DetectionLogRepository;
 import pocketyacsa.server.member.entity.Member;
@@ -82,7 +83,6 @@ class DetectionLogServiceTest {
 
     detectionLogRes = DetectionLogRes.builder()
         .id(1)
-        .memberId(1)
         .medicineName(medicine.getName())
         .medicineCompany(medicine.getCompany())
         .createdAt(LocalDateTime.of(1, 1, 1, 1, 1))
@@ -184,8 +184,8 @@ class DetectionLogServiceTest {
     }
     for (int i = 1; i <= pageSize; i++) {
       detectionLogResList.add(
-          DetectionLogRes.builder().id(i).memberId(member.getId()).medicineId(i).medicineName("a")
-              .medicineCompany("a").createdAt(time).build());
+          DetectionLogRes.builder().id(i).medicineId(i).medicineName("a")
+              .medicineCompany("a").medicineImage("a").createdAt(time).build());
     }
 
     when(memberService.getLoginMember()).thenReturn(member);
@@ -194,9 +194,16 @@ class DetectionLogServiceTest {
         PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
         .thenReturn(detectionLogs.subList(0, pageSize));
 
-    List<DetectionLogRes> result = detectionLogService.getDetectionLogsByPage(page);
+    DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
+        .memberId(member.getId())
+        .page(page)
+        .lastPage(false)
+        .detectionLogs(detectionLogResList)
+        .build();
 
-    assertEquals(result, detectionLogResList);
+    DetectionLogPageRes result = detectionLogService.getDetectionLogsByPage(page);
+
+    assertEquals(result, detectionLogPageRes);
   }
 
   @Test
@@ -216,8 +223,8 @@ class DetectionLogServiceTest {
     }
     for (int i = 7; i <= count; i++) {
       detectionLogResList.add(
-          DetectionLogRes.builder().id(i).memberId(member.getId()).medicineId(i).medicineName("a")
-              .medicineCompany("a").createdAt(time).build());
+          DetectionLogRes.builder().id(i).medicineId(i).medicineName("a")
+              .medicineCompany("a").medicineImage("a").createdAt(time).build());
     }
 
     when(memberService.getLoginMember()).thenReturn(member);
@@ -226,9 +233,17 @@ class DetectionLogServiceTest {
         PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
         .thenReturn(detectionLogs.subList(pageSize, count));
 
-    List<DetectionLogRes> result = detectionLogService.getDetectionLogsByPage(page);
+    DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
+        .memberId(member.getId())
+        .page(page)
+        .lastPage(true)
+        .detectionLogs(detectionLogResList)
+        .build();
 
-    assertEquals(result, detectionLogResList);
+    DetectionLogPageRes result = detectionLogService.getDetectionLogsByPage(page);
+
+    assertEquals(result, detectionLogPageRes);
+
   }
 
   @Test
@@ -272,6 +287,7 @@ class DetectionLogServiceTest {
 
     assertThrows(BadRequestException.class, () -> detectionLogService.getDetectionLogsByPage(page));
   }
+
   @Test
   public void getDetectionLogsByPage_DataNotExist() {
     int page = 1;

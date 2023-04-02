@@ -3,18 +3,16 @@ package pocketyacsa.server.medicine.controller;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pocketyacsa.server.common.exception.handler.CommonResponse;
-import pocketyacsa.server.medicine.domain.response.FavoriteRes;
+import pocketyacsa.server.medicine.domain.response.FavoritePageRes;
 import pocketyacsa.server.medicine.service.FavoriteService;
 
 @RestController
@@ -71,8 +69,8 @@ public class FavoriteController {
    * @param page 페이지 수
    * @return 페이지에 존재하는 모든 favoriteRes
    */
-  @GetMapping("page/{page}")
-  public List<FavoriteRes> getFavoritesByPage(@PathVariable int page) {
+  @GetMapping
+  public FavoritePageRes getFavoritesByPage(@RequestParam int page) {
     return favoriteService.getFavoritesByPage(page);
   }
 }

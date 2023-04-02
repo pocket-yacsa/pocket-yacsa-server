@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.entity.Favorite;
 import pocketyacsa.server.medicine.domain.entity.Medicine;
+import pocketyacsa.server.medicine.domain.response.FavoritePageRes;
 import pocketyacsa.server.medicine.domain.response.FavoriteRes;
 import pocketyacsa.server.medicine.repository.FavoriteRepository;
 import pocketyacsa.server.member.entity.Member;
@@ -116,7 +117,7 @@ public class FavoriteService {
    * @param page 페이지 수
    * @return 특정 page의 favorite 응답목록
    */
-  public List<FavoriteRes> getFavoritesByPage(int page) {
+  public FavoritePageRes getFavoritesByPage(int page) {
     Member loginMember = memberService.getLoginMember();
     int totalSize = repository.countByMemberId(loginMember.getId());
     int totalPages = (int) Math.ceil((double) totalSize / pageSize);
@@ -134,15 +135,24 @@ public class FavoriteService {
     List<FavoriteRes> favoriteResList = favorites.stream()
         .map(favorite -> FavoriteRes.builder()
             .id(favorite.getId())
-            .memberId(favorite.getMember().getId())
             .medicineId(favorite.getMedicine().getId())
             .medicineName(favorite.getMedicine().getName())
             .medicineCompany(favorite.getMedicine().getCompany())
+            .medicineImage(favorite.getMedicine().getImage())
             .createdAt(favorite.getCreatedAt())
             .build())
         .collect(Collectors.toList());
 
-    return favoriteResList;
+    boolean lastPage = (page == totalPages) ? true : false;
+
+    FavoritePageRes favoritePageRes = FavoritePageRes.builder()
+        .memberId(loginMember.getId())
+        .page(page)
+        .lastPage(lastPage)
+        .favorites(favoriteResList)
+        .build();
+
+    return favoritePageRes;
   }
 
   /**
