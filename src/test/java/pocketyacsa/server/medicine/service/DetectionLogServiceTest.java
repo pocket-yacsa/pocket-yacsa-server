@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static pocketyacsa.server.common.utility.Constant.pageSize;
+import static pocketyacsa.server.common.utility.SortDirection.DESCENDING;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -196,12 +197,14 @@ class DetectionLogServiceTest {
 
     DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
         .memberId(member.getId())
+        .total(count)
+        .totalPage((int) Math.ceil((double) count / pageSize))
         .page(page)
         .lastPage(false)
         .detectionLogs(detectionLogResList)
         .build();
 
-    DetectionLogPageRes result = detectionLogService.getDetectionLogsByPage(page);
+    DetectionLogPageRes result = detectionLogService.getDetectionLogsByPageSorted(page, DESCENDING);
 
     assertEquals(result, detectionLogPageRes);
   }
@@ -235,12 +238,14 @@ class DetectionLogServiceTest {
 
     DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
         .memberId(member.getId())
+        .total(count)
+        .totalPage((int) Math.ceil((double) count / pageSize))
         .page(page)
         .lastPage(true)
         .detectionLogs(detectionLogResList)
         .build();
 
-    DetectionLogPageRes result = detectionLogService.getDetectionLogsByPage(page);
+    DetectionLogPageRes result = detectionLogService.getDetectionLogsByPageSorted(page, DESCENDING);
 
     assertEquals(result, detectionLogPageRes);
 
@@ -264,7 +269,8 @@ class DetectionLogServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(count);
 
-    assertThrows(BadRequestException.class, () -> detectionLogService.getDetectionLogsByPage(page));
+    assertThrows(BadRequestException.class,
+        () -> detectionLogService.getDetectionLogsByPageSorted(page, DESCENDING));
   }
 
   @Test
@@ -285,7 +291,8 @@ class DetectionLogServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(count);
 
-    assertThrows(BadRequestException.class, () -> detectionLogService.getDetectionLogsByPage(page));
+    assertThrows(BadRequestException.class,
+        () -> detectionLogService.getDetectionLogsByPageSorted(page, DESCENDING));
   }
 
   @Test
@@ -295,7 +302,8 @@ class DetectionLogServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(0);
 
-    assertThrows(BadRequestException.class, () -> detectionLogService.getDetectionLogsByPage(page));
+    assertThrows(BadRequestException.class,
+        () -> detectionLogService.getDetectionLogsByPageSorted(page, DESCENDING));
   }
 
   @Test

@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static pocketyacsa.server.common.utility.Constant.pageSize;
+import static pocketyacsa.server.common.utility.SortDirection.DESCENDING;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -219,6 +220,8 @@ class FavoriteServiceTest {
 
     FavoritePageRes favoritePageRes = FavoritePageRes.builder()
         .memberId(member.getId())
+        .total(count)
+        .totalPage((int) Math.ceil((double) count / pageSize))
         .page(page)
         .lastPage(false)
         .favorites(favoriteReses)
@@ -230,7 +233,7 @@ class FavoriteServiceTest {
         PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
         .thenReturn(favorites.subList(0, pageSize));
 
-    FavoritePageRes result = favoriteService.getFavoritesByPage(page);
+    FavoritePageRes result = favoriteService.getFavoritesByPageSorted(page, DESCENDING);
 
     assertEquals(result, favoritePageRes);
   }
@@ -258,6 +261,8 @@ class FavoriteServiceTest {
 
     FavoritePageRes favoritePageRes = FavoritePageRes.builder()
         .memberId(member.getId())
+        .total(count)
+        .totalPage((int) Math.ceil((double) count / pageSize))
         .page(page)
         .lastPage(true)
         .favorites(favoriteReses)
@@ -269,7 +274,7 @@ class FavoriteServiceTest {
         PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
         .thenReturn(favorites.subList(pageSize, count));
 
-    FavoritePageRes result = favoriteService.getFavoritesByPage(page);
+    FavoritePageRes result = favoriteService.getFavoritesByPageSorted(page, DESCENDING);
 
     assertEquals(result, favoritePageRes);
   }
@@ -292,7 +297,8 @@ class FavoriteServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(favoriteRepository.countByMemberId(member.getId())).thenReturn(count);
 
-    assertThrows(BadRequestException.class, () -> favoriteService.getFavoritesByPage(page));
+    assertThrows(BadRequestException.class,
+        () -> favoriteService.getFavoritesByPageSorted(page, DESCENDING));
   }
 
   @Test
@@ -313,7 +319,8 @@ class FavoriteServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(favoriteRepository.countByMemberId(member.getId())).thenReturn(count);
 
-    assertThrows(BadRequestException.class, () -> favoriteService.getFavoritesByPage(page));
+    assertThrows(BadRequestException.class,
+        () -> favoriteService.getFavoritesByPageSorted(page, DESCENDING));
   }
 
   @Test
@@ -323,7 +330,8 @@ class FavoriteServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(favoriteRepository.countByMemberId(member.getId())).thenReturn(0);
 
-    assertThrows(BadRequestException.class, () -> favoriteService.getFavoritesByPage(page));
+    assertThrows(BadRequestException.class,
+        () -> favoriteService.getFavoritesByPageSorted(page, DESCENDING));
   }
 
   @Test

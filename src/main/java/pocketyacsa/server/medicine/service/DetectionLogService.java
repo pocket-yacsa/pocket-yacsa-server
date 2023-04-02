@@ -1,6 +1,7 @@
 package pocketyacsa.server.medicine.service;
 
 import static pocketyacsa.server.common.utility.Constant.pageSize;
+import static pocketyacsa.server.common.utility.SortDirection.ASCENDING;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.DETECTION_LOG_NOT_EXIST;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.DETECTION_LOG_NO_PERMISSION;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.PAGE_OUT_OF_RANGE;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pocketyacsa.server.common.exception.BadRequestException;
+import pocketyacsa.server.common.utility.SortDirection;
 import pocketyacsa.server.medicine.domain.entity.DetectionLog;
 import pocketyacsa.server.medicine.domain.entity.Medicine;
 import pocketyacsa.server.medicine.domain.response.DetectionLogPageRes;
@@ -99,7 +101,7 @@ public class DetectionLogService {
    * @param page 페이지 수
    * @return 특정 page의 detectionLog 응답목록
    */
-  public DetectionLogPageRes getDetectionLogsByPage(int page) {
+  public DetectionLogPageRes getDetectionLogsByPageSorted(int page, SortDirection sortDirection) {
     Member loginMember = memberService.getLoginMember();
     int totalSize = repository.countByMemberId(loginMember.getId());
     int totalPages = (int) Math.ceil((double) totalSize / pageSize);
@@ -111,8 +113,10 @@ public class DetectionLogService {
       throw new BadRequestException(PAGE_OUT_OF_RANGE.getErrorResponse());
     }
 
+    Sort sort = sortDirection == ASCENDING ? Sort.by("createdAt").ascending()
+        : Sort.by("createdAt").descending();
     List<DetectionLog> detectionLogs = repository.findByMemberId(loginMember.getId(),
-        PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()));
+        PageRequest.of(page - 1, pageSize, sort));
 
     List<DetectionLogRes> detectionLogResList = detectionLogs.stream()
         .map(detectionLog -> DetectionLogRes.builder()
@@ -129,6 +133,8 @@ public class DetectionLogService {
 
     DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
         .memberId(loginMember.getId())
+        .total(totalSize)
+        .totalPage(totalPages)
         .page(page)
         .lastPage(isLastPage)
         .detectionLogs(detectionLogResList)
