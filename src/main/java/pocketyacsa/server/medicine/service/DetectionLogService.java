@@ -129,6 +129,7 @@ public class DetectionLogService {
 
     DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
         .memberId(loginMember.getId())
+        .total(totalSize)
         .page(page)
         .lastPage(isLastPage)
         .detectionLogs(detectionLogResList)

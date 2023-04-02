@@ -219,6 +219,7 @@ class FavoriteServiceTest {
 
     FavoritePageRes favoritePageRes = FavoritePageRes.builder()
         .memberId(member.getId())
+        .total(count)
         .page(page)
         .lastPage(false)
         .favorites(favoriteReses)
@@ -258,6 +259,7 @@ class FavoriteServiceTest {
 
     FavoritePageRes favoritePageRes = FavoritePageRes.builder()
         .memberId(member.getId())
+        .total(count)
         .page(page)
         .lastPage(true)
         .favorites(favoriteReses)

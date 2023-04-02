@@ -196,6 +196,7 @@ class DetectionLogServiceTest {
 
     DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
         .memberId(member.getId())
+        .total(count)
         .page(page)
         .lastPage(false)
         .detectionLogs(detectionLogResList)
@@ -235,6 +236,7 @@ class DetectionLogServiceTest {
 
     DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
         .memberId(member.getId())
+        .total(count)
         .page(page)
         .lastPage(true)
         .detectionLogs(detectionLogResList)

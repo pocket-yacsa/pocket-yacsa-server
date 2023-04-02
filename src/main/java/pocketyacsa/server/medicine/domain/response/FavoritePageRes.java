@@ -16,6 +16,8 @@ public class FavoritePageRes {
 
   private int memberId;
 
+  private int total;
+
   private int page;
 
   private boolean lastPage;

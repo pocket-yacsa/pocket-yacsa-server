@@ -147,6 +147,7 @@ public class FavoriteService {
 
     FavoritePageRes favoritePageRes = FavoritePageRes.builder()
         .memberId(loginMember.getId())
+        .total(totalSize)
         .page(page)
         .lastPage(lastPage)
         .favorites(favoriteResList)
