@@ -16,13 +16,13 @@ public class DetectionLogRes {
 
   private int id;
 
-  private int memberId;
-
   private int medicineId;
 
   private String medicineName;
 
   private String medicineCompany;
+
+  private String medicineImage;
 
   private LocalDateTime createdAt;
 }

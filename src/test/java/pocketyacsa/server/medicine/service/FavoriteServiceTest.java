@@ -23,6 +23,7 @@ import org.springframework.data.domain.Sort;
 import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.entity.Favorite;
 import pocketyacsa.server.medicine.domain.entity.Medicine;
+import pocketyacsa.server.medicine.domain.response.FavoritePageRes;
 import pocketyacsa.server.medicine.domain.response.FavoriteRes;
 import pocketyacsa.server.medicine.repository.FavoriteRepository;
 import pocketyacsa.server.member.entity.Member;
@@ -83,9 +84,9 @@ class FavoriteServiceTest {
 
     favoriteRes = FavoriteRes.builder()
         .id(1)
-        .memberId(1)
         .medicineName(medicine.getName())
         .medicineCompany(medicine.getCompany())
+        .medicineImage(medicine.getImage())
         .createdAt(LocalDateTime.of(1, 1, 1, 1, 1))
         .build();
   }
@@ -212,9 +213,16 @@ class FavoriteServiceTest {
     }
     for (int i = 1; i <= pageSize; i++) {
       favoriteReses.add(
-          FavoriteRes.builder().id(i).memberId(member.getId()).medicineId(i).medicineName("a")
-              .medicineCompany("a").createdAt(time).build());
+          FavoriteRes.builder().id(i).medicineId(i).medicineName("a")
+              .medicineCompany("a").medicineImage("a").createdAt(time).build());
     }
+
+    FavoritePageRes favoritePageRes = FavoritePageRes.builder()
+        .memberId(member.getId())
+        .page(page)
+        .lastPage(false)
+        .favorites(favoriteReses)
+        .build();
 
     when(memberService.getLoginMember()).thenReturn(member);
     when(favoriteRepository.countByMemberId(member.getId())).thenReturn(count);
@@ -222,9 +230,9 @@ class FavoriteServiceTest {
         PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
         .thenReturn(favorites.subList(0, pageSize));
 
-    List<FavoriteRes> result = favoriteService.getFavoritesByPage(page);
+    FavoritePageRes result = favoriteService.getFavoritesByPage(page);
 
-    assertEquals(result, favoriteReses);
+    assertEquals(result, favoritePageRes);
   }
 
   @Test
@@ -242,11 +250,18 @@ class FavoriteServiceTest {
       fav.setUpdatedAt(time);
       favorites.add(fav);
     }
-    for (int i = 7; i <= count; i++) {
+    for (int i = pageSize + 1; i <= count; i++) {
       favoriteReses.add(
-          FavoriteRes.builder().id(i).memberId(member.getId()).medicineId(i).medicineName("a")
-              .medicineCompany("a").createdAt(time).build());
+          FavoriteRes.builder().id(i).medicineId(i).medicineName("a")
+              .medicineCompany("a").medicineImage("a").createdAt(time).build());
     }
+
+    FavoritePageRes favoritePageRes = FavoritePageRes.builder()
+        .memberId(member.getId())
+        .page(page)
+        .lastPage(true)
+        .favorites(favoriteReses)
+        .build();
 
     when(memberService.getLoginMember()).thenReturn(member);
     when(favoriteRepository.countByMemberId(member.getId())).thenReturn(count);
@@ -254,9 +269,9 @@ class FavoriteServiceTest {
         PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
         .thenReturn(favorites.subList(pageSize, count));
 
-    List<FavoriteRes> result = favoriteService.getFavoritesByPage(page);
+    FavoritePageRes result = favoriteService.getFavoritesByPage(page);
 
-    assertEquals(result, favoriteReses);
+    assertEquals(result, favoritePageRes);
   }
 
   @Test
@@ -321,3 +336,4 @@ class FavoriteServiceTest {
     assertEquals(result, 10);
   }
 }
+
