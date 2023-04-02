@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pocketyacsa.server.common.exception.handler.CommonResponse;
+import pocketyacsa.server.common.utility.SortDirection;
 import pocketyacsa.server.medicine.domain.response.DetectionLogPageRes;
 import pocketyacsa.server.medicine.service.DetectionLogService;
 
@@ -70,7 +71,9 @@ public class DetectionLogController {
    * @return 페이지에 존재하는 모든 detectionLogRes
    */
   @GetMapping
-  public DetectionLogPageRes getDetectionLogsByPage(@RequestParam int page) {
-    return detectionLogService.getDetectionLogsByPage(page);
+  public DetectionLogPageRes getDetectionLogsByPage(@RequestParam SortDirection order,
+      @RequestParam int page) {
+    return detectionLogService.getDetectionLogsByPageSorted(page, order);
   }
 }
+

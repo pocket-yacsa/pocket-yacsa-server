@@ -1,6 +1,7 @@
 package pocketyacsa.server.medicine.service;
 
 import static pocketyacsa.server.common.utility.Constant.pageSize;
+import static pocketyacsa.server.common.utility.SortDirection.*;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.FAVORITE_ALREADY_EXIST;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.FAVORITE_NOT_EXIST;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.FAVORITE_NO_PERMISSION;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pocketyacsa.server.common.exception.BadRequestException;
+import pocketyacsa.server.common.utility.SortDirection;
 import pocketyacsa.server.medicine.domain.entity.Favorite;
 import pocketyacsa.server.medicine.domain.entity.Medicine;
 import pocketyacsa.server.medicine.domain.response.FavoritePageRes;
@@ -117,7 +119,7 @@ public class FavoriteService {
    * @param page 페이지 수
    * @return 특정 page의 favorite 응답목록
    */
-  public FavoritePageRes getFavoritesByPage(int page) {
+  public FavoritePageRes getFavoritesByPageSorted(int page, SortDirection sortDirection) {
     Member loginMember = memberService.getLoginMember();
     int totalSize = repository.countByMemberId(loginMember.getId());
     int totalPages = (int) Math.ceil((double) totalSize / pageSize);
@@ -129,8 +131,10 @@ public class FavoriteService {
       throw new BadRequestException(PAGE_OUT_OF_RANGE.getErrorResponse());
     }
 
+    Sort sort = sortDirection == ASCENDING ? Sort.by("createdAt").ascending()
+        : Sort.by("createdAt").descending();
     List<Favorite> favorites = repository.findByMemberId(loginMember.getId(),
-        PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()));
+        PageRequest.of(page - 1, pageSize, sort));
 
     List<FavoriteRes> favoriteResList = favorites.stream()
         .map(favorite -> FavoriteRes.builder()
@@ -143,17 +147,16 @@ public class FavoriteService {
             .build())
         .collect(Collectors.toList());
 
-    boolean lastPage = (page == totalPages) ? true : false;
+    boolean lastPage = (page == totalPages);
 
-    FavoritePageRes favoritePageRes = FavoritePageRes.builder()
+    return FavoritePageRes.builder()
         .memberId(loginMember.getId())
         .total(totalSize)
+        .totalPage(totalPages)
         .page(page)
         .lastPage(lastPage)
         .favorites(favoriteResList)
         .build();
-
-    return favoritePageRes;
   }
 
   /**

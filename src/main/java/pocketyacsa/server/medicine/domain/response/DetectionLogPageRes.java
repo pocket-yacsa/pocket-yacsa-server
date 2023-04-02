@@ -18,6 +18,8 @@ public class DetectionLogPageRes {
 
   private int total;
 
+  private int totalPage;
+
   private int page;
 
   private boolean lastPage;
