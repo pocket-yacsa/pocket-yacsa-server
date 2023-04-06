@@ -1,6 +1,6 @@
 package pocketyacsa.server.medicine.service;
 
-import static pocketyacsa.server.common.utility.Constant.pageSize;
+import static pocketyacsa.server.common.utility.Constant.PAGE_SIZE;
 import static pocketyacsa.server.common.utility.SortDirection.*;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.FAVORITE_ALREADY_EXIST;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.FAVORITE_NOT_EXIST;
@@ -122,7 +122,7 @@ public class FavoriteService {
   public FavoritePageRes getFavoritesByPageSorted(int page, SortDirection sortDirection) {
     Member loginMember = memberService.getLoginMember();
     int totalSize = repository.countByMemberId(loginMember.getId());
-    int totalPages = (int) Math.ceil((double) totalSize / pageSize);
+    int totalPages = (int) Math.ceil((double) totalSize / PAGE_SIZE);
 
     if (totalSize == 0) {
       throw new BadRequestException(FAVORITE_NOT_EXIST.getErrorResponse());
@@ -134,7 +134,7 @@ public class FavoriteService {
     Sort sort = sortDirection == ASCENDING ? Sort.by("createdAt").ascending()
         : Sort.by("createdAt").descending();
     List<Favorite> favorites = repository.findByMemberId(loginMember.getId(),
-        PageRequest.of(page - 1, pageSize, sort));
+        PageRequest.of(page - 1, PAGE_SIZE, sort));
 
     List<FavoriteRes> favoriteResList = favorites.stream()
         .map(favorite -> FavoriteRes.builder()

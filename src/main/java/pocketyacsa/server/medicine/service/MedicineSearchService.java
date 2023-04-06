@@ -1,10 +1,14 @@
 package pocketyacsa.server.medicine.service;
 
-import static pocketyacsa.server.common.utility.Constant.pageSize;
+import static pocketyacsa.server.common.utility.Constant.KEYWORD_SIZE;
+import static pocketyacsa.server.common.utility.Constant.PAGE_SIZE;
+import static pocketyacsa.server.common.utility.Constant.RECENT_KEYWORD_SIZE;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.KEYWORD_NOT_EXIST;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.PAGE_OUT_OF_RANGE;
+import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.SEARCH_LOG_NOT_EXIST;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.SEARCH_RESULT_NOT_EXIST;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +17,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.entity.MedicineSearch;
+import pocketyacsa.server.medicine.domain.redisValue.SearchLogRedis;
 import pocketyacsa.server.medicine.domain.response.MedicineSearchPageRes;
 import pocketyacsa.server.medicine.repository.MedicineSearchRepository;
+import pocketyacsa.server.member.entity.Member;
 import pocketyacsa.server.member.service.MemberService;
 
 @Service
@@ -23,7 +29,7 @@ public class MedicineSearchService {
 
   private final MedicineSearchRepository repository;
   private final MemberService memberService;
-  private final RedisTemplate redisTemplate;
+  private final RedisTemplate<String, SearchLogRedis> redisTemplate;
 
   /**
    * 특정 name의 medicine 검색결과를 반환합니다. page를 넘겨줌으로써 특정 페이지의 정보로 제공됩니다.
@@ -37,7 +43,7 @@ public class MedicineSearchService {
       throw new BadRequestException(KEYWORD_NOT_EXIST.getErrorResponse());
     }
     int totalSize = repository.countByName(name);
-    int totalPages = (int) Math.ceil((double) totalSize / pageSize);
+    int totalPages = (int) Math.ceil((double) totalSize / PAGE_SIZE);
 
     if (totalSize == 0) {
       throw new BadRequestException(SEARCH_RESULT_NOT_EXIST.getErrorResponse());
@@ -47,17 +53,46 @@ public class MedicineSearchService {
     }
 
     List<MedicineSearch> searchResults = repository.findByName(name,
-        PageRequest.of(page - 1, pageSize));
+        PageRequest.of(page - 1, PAGE_SIZE));
 
     boolean lastPage = (page == totalPages);
 
-    return MedicineSearchPageRes.builder()
-        .total(totalSize)
-        .totalPage(totalPages)
-        .page(page)
-        .lastPage(lastPage)
-        .medicineSearchList(searchResults)
-        .build();
+    MedicineSearchPageRes response = MedicineSearchPageRes.builder().total(totalSize)
+        .totalPage(totalPages).page(page)
+        .lastPage(lastPage).medicineSearchList(searchResults).build();
+
+    return response;
+  }
+
+  /**
+   * 특정 name의 medicine 검색결과의 첫번째 페이지를 반환합니다. 이 때 검색기록에 추가됩니다.
+   *
+   * @param name 의약품 검색어
+   * @return name으로 검색한 첫번째 결과
+   */
+  public MedicineSearchPageRes getMedicineSearchAtFist(String name) {
+    if (name.isEmpty()) {
+      throw new BadRequestException(KEYWORD_NOT_EXIST.getErrorResponse());
+    }
+    int totalSize = repository.countByName(name);
+    int totalPages = (int) Math.ceil((double) totalSize / PAGE_SIZE);
+
+    if (totalSize == 0) {
+      throw new BadRequestException(SEARCH_RESULT_NOT_EXIST.getErrorResponse());
+    }
+
+    List<MedicineSearch> searchResults = repository.findByName(name,
+        PageRequest.of(0, PAGE_SIZE));
+
+    boolean lastPage = (totalPages == 1);
+
+    MedicineSearchPageRes response = MedicineSearchPageRes.builder().total(totalSize)
+        .totalPage(totalPages).page(1)
+        .lastPage(lastPage).medicineSearchList(searchResults).build();
+
+    saveRecentSearchLog(name);
+
+    return response;
   }
 
   /**
@@ -71,12 +106,79 @@ public class MedicineSearchService {
       throw new BadRequestException(KEYWORD_NOT_EXIST.getErrorResponse());
     }
     List<MedicineSearch> searchResults = repository.findByName(name,
-        PageRequest.of(0, 10));
+        PageRequest.of(0, KEYWORD_SIZE));
 
-    List<String> medicineNames = searchResults.stream()
-        .map(MedicineSearch::getName)
+    List<String> medicineNames = searchResults.stream().map(MedicineSearch::getName)
         .collect(Collectors.toList());
 
     return medicineNames;
+  }
+
+  /**
+   * 검색기록에 검색어를 추가합니다.
+   *
+   * @param name 검색기록에 추가할 검색어
+   */
+  public void saveRecentSearchLog(String name) {
+    LocalDateTime now = LocalDateTime.now();
+    Member loginMember = memberService.getLoginMember();
+    String key = searchLogKey(loginMember.getId());
+    SearchLogRedis value = SearchLogRedis.builder()
+        .name(name).
+        createdAt(now.toString()).build();
+
+    redisTemplate.opsForList().leftPush(key, value);
+  }
+
+  /**
+   * 최근 검색기록을 RECENT_KEYWORD_SIZE만큼 반환합니다.
+   *
+   * @return 최근 검색기록들
+   */
+  public List<SearchLogRedis> getRecentSearchLogs() {
+    Member loginMember = memberService.getLoginMember();
+    String key = searchLogKey(loginMember.getId());
+    List<SearchLogRedis> logs = redisTemplate.opsForList().
+        range(key, 0, RECENT_KEYWORD_SIZE);
+
+    return logs;
+  }
+
+  /**
+   * 특정 최근 검색기록을 삭제합니다.
+   *
+   * @param searchLogRedis 검색기록 정보
+   */
+  public void deleteRecentSearchLog(SearchLogRedis searchLogRedis) {
+    Member loginMember = memberService.getLoginMember();
+    String key = searchLogKey(loginMember.getId());
+    long count = redisTemplate.opsForList().remove(key, 1, searchLogRedis);
+
+    if (count == 0) {
+      throw new BadRequestException(SEARCH_LOG_NOT_EXIST.getErrorResponse());
+    }
+  }
+
+  /**
+   * 전체 검색기록을 삭제합니다.
+   */
+  public void deleteRecentSearchLogs() {
+    Member loginMember = memberService.getLoginMember();
+    String key = searchLogKey(loginMember.getId());
+    Boolean isDeleted = redisTemplate.delete(key);
+
+    if (!isDeleted) {
+      throw new BadRequestException(SEARCH_LOG_NOT_EXIST.getErrorResponse());
+    }
+  }
+
+  /**
+   * redis에 저장할 사용자의 검색기록 key를 생성합니다.
+   *
+   * @param memberId member의 id
+   * @return redis에 저장할 검색기록 key
+   */
+  private String searchLogKey(int memberId) {
+    return memberId + " SearchLog";
   }
 }

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static pocketyacsa.server.common.utility.Constant.pageSize;
+import static pocketyacsa.server.common.utility.Constant.PAGE_SIZE;
 import static pocketyacsa.server.common.utility.SortDirection.DESCENDING;
 
 import java.time.LocalDateTime;
@@ -200,7 +200,7 @@ class FavoriteServiceTest {
   @Test
   public void getFavoritesByPage_ReturnFirstPage() {
     int page = 1;
-    int count = pageSize + 1;
+    int count = PAGE_SIZE + 1;
     LocalDateTime time = LocalDateTime.of(2023, 1, 1, 1, 1);
     List<Favorite> favorites = new ArrayList<>();
     List<FavoriteRes> favoriteReses = new ArrayList<>();
@@ -212,7 +212,7 @@ class FavoriteServiceTest {
       fav.setUpdatedAt(time);
       favorites.add(fav);
     }
-    for (int i = 1; i <= pageSize; i++) {
+    for (int i = 1; i <= PAGE_SIZE; i++) {
       favoriteReses.add(
           FavoriteRes.builder().id(i).medicineId(i).medicineName("a")
               .medicineCompany("a").medicineImage("a").createdAt(time).build());
@@ -221,7 +221,7 @@ class FavoriteServiceTest {
     FavoritePageRes favoritePageRes = FavoritePageRes.builder()
         .memberId(member.getId())
         .total(count)
-        .totalPage((int) Math.ceil((double) count / pageSize))
+        .totalPage((int) Math.ceil((double) count / PAGE_SIZE))
         .page(page)
         .lastPage(false)
         .favorites(favoriteReses)
@@ -230,8 +230,8 @@ class FavoriteServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(favoriteRepository.countByMemberId(member.getId())).thenReturn(count);
     when(favoriteRepository.findByMemberId(eq(member.getId()), eq(
-        PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
-        .thenReturn(favorites.subList(0, pageSize));
+        PageRequest.of(page - 1, PAGE_SIZE, Sort.by("createdAt").descending()))))
+        .thenReturn(favorites.subList(0, PAGE_SIZE));
 
     FavoritePageRes result = favoriteService.getFavoritesByPageSorted(page, DESCENDING);
 
@@ -241,7 +241,7 @@ class FavoriteServiceTest {
   @Test
   public void getFavoritesByPage_ReturnLastPage() {
     int page = 2;
-    int count = pageSize * 2 - 1;
+    int count = PAGE_SIZE * 2 - 1;
     List<Favorite> favorites = new ArrayList<>();
     List<FavoriteRes> favoriteReses = new ArrayList<>();
 
@@ -253,7 +253,7 @@ class FavoriteServiceTest {
       fav.setUpdatedAt(time);
       favorites.add(fav);
     }
-    for (int i = pageSize + 1; i <= count; i++) {
+    for (int i = PAGE_SIZE + 1; i <= count; i++) {
       favoriteReses.add(
           FavoriteRes.builder().id(i).medicineId(i).medicineName("a")
               .medicineCompany("a").medicineImage("a").createdAt(time).build());
@@ -262,7 +262,7 @@ class FavoriteServiceTest {
     FavoritePageRes favoritePageRes = FavoritePageRes.builder()
         .memberId(member.getId())
         .total(count)
-        .totalPage((int) Math.ceil((double) count / pageSize))
+        .totalPage((int) Math.ceil((double) count / PAGE_SIZE))
         .page(page)
         .lastPage(true)
         .favorites(favoriteReses)
@@ -271,8 +271,8 @@ class FavoriteServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(favoriteRepository.countByMemberId(member.getId())).thenReturn(count);
     when(favoriteRepository.findByMemberId(eq(member.getId()), eq(
-        PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
-        .thenReturn(favorites.subList(pageSize, count));
+        PageRequest.of(page - 1, PAGE_SIZE, Sort.by("createdAt").descending()))))
+        .thenReturn(favorites.subList(PAGE_SIZE, count));
 
     FavoritePageRes result = favoriteService.getFavoritesByPageSorted(page, DESCENDING);
 
@@ -282,17 +282,7 @@ class FavoriteServiceTest {
   @Test
   public void getFavoritesByPage_ReturnPageZero() {
     int page = 0;
-    int count = pageSize;
-    List<Favorite> favorites = new ArrayList<>();
-
-    for (int i = 1; i <= count; i++) {
-      Medicine med = Medicine.builder().id(i).code(Integer.toString(i)).name("a").company("a")
-          .ingredient("a").image("a").effect("a").usages("a").precautions("a").build();
-      Favorite fav = Favorite.builder().id(i).member(member).medicine(med).build();
-      fav.setCreatedAt(time);
-      fav.setUpdatedAt(time);
-      favorites.add(fav);
-    }
+    int count = PAGE_SIZE;
 
     when(memberService.getLoginMember()).thenReturn(member);
     when(favoriteRepository.countByMemberId(member.getId())).thenReturn(count);
@@ -304,17 +294,7 @@ class FavoriteServiceTest {
   @Test
   public void getFavoritesByPage_ReturnLastPageNext() {
     int page = 2;
-    int count = pageSize;
-    List<Favorite> favorites = new ArrayList<>();
-
-    for (int i = 1; i <= count; i++) {
-      Medicine med = Medicine.builder().id(i).code(Integer.toString(i)).name("a").company("a")
-          .ingredient("a").image("a").effect("a").usages("a").precautions("a").build();
-      Favorite fav = Favorite.builder().id(i).member(member).medicine(med).build();
-      fav.setCreatedAt(time);
-      fav.setUpdatedAt(time);
-      favorites.add(fav);
-    }
+    int count = PAGE_SIZE;
 
     when(memberService.getLoginMember()).thenReturn(member);
     when(favoriteRepository.countByMemberId(member.getId())).thenReturn(count);

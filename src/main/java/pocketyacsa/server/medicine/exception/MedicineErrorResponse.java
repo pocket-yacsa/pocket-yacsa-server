@@ -19,6 +19,8 @@ public enum MedicineErrorResponse {
       of("PAGE_OUT_OF_RANGE", BAD_REQUEST, "페이지 범위를 벗어납니다.")),
   KEYWORD_NOT_EXIST(
       of("KEYWORD_NOT_EXIST", BAD_REQUEST, "검색어를 입력해주세요.")),
+  SEARCH_LOG_NOT_EXIST(
+      of("SEARCH_LOG_NOT_EXIST", BAD_REQUEST, "검색기록이 존재하지 않습니다.")),
 
   // 403 FORBIDDEN
   FAVORITE_NO_PERMISSION(

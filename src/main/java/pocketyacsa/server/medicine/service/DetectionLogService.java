@@ -1,6 +1,6 @@
 package pocketyacsa.server.medicine.service;
 
-import static pocketyacsa.server.common.utility.Constant.pageSize;
+import static pocketyacsa.server.common.utility.Constant.PAGE_SIZE;
 import static pocketyacsa.server.common.utility.SortDirection.ASCENDING;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.DETECTION_LOG_NOT_EXIST;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.DETECTION_LOG_NO_PERMISSION;
@@ -104,7 +104,7 @@ public class DetectionLogService {
   public DetectionLogPageRes getDetectionLogsByPageSorted(int page, SortDirection sortDirection) {
     Member loginMember = memberService.getLoginMember();
     int totalSize = repository.countByMemberId(loginMember.getId());
-    int totalPages = (int) Math.ceil((double) totalSize / pageSize);
+    int totalPages = (int) Math.ceil((double) totalSize / PAGE_SIZE);
 
     if (totalSize == 0) {
       throw new BadRequestException(DETECTION_LOG_NOT_EXIST.getErrorResponse());
@@ -116,7 +116,7 @@ public class DetectionLogService {
     Sort sort = sortDirection == ASCENDING ? Sort.by("createdAt").ascending()
         : Sort.by("createdAt").descending();
     List<DetectionLog> detectionLogs = repository.findByMemberId(loginMember.getId(),
-        PageRequest.of(page - 1, pageSize, sort));
+        PageRequest.of(page - 1, PAGE_SIZE, sort));
 
     List<DetectionLogRes> detectionLogResList = detectionLogs.stream()
         .map(detectionLog -> DetectionLogRes.builder()
