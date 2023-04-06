@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static pocketyacsa.server.common.utility.Constant.pageSize;
+import static pocketyacsa.server.common.utility.Constant.PAGE_SIZE;
 import static pocketyacsa.server.common.utility.SortDirection.DESCENDING;
 
 import java.time.LocalDateTime;
@@ -171,7 +171,7 @@ class DetectionLogServiceTest {
   @Test
   public void getDetectionLogsByPage_ReturnFirstPage() {
     int page = 1;
-    int count = pageSize + 1;
+    int count = PAGE_SIZE + 1;
     LocalDateTime time = LocalDateTime.of(2023, 1, 1, 1, 1);
     List<DetectionLog> detectionLogs = new ArrayList<>();
     List<DetectionLogRes> detectionLogResList = new ArrayList<>();
@@ -183,7 +183,7 @@ class DetectionLogServiceTest {
       detLog.setUpdatedAt(time);
       detectionLogs.add(detLog);
     }
-    for (int i = 1; i <= pageSize; i++) {
+    for (int i = 1; i <= PAGE_SIZE; i++) {
       detectionLogResList.add(
           DetectionLogRes.builder().id(i).medicineId(i).medicineName("a")
               .medicineCompany("a").medicineImage("a").createdAt(time).build());
@@ -192,13 +192,13 @@ class DetectionLogServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(count);
     when(detectionLogRepository.findByMemberId(eq(member.getId()), eq(
-        PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
-        .thenReturn(detectionLogs.subList(0, pageSize));
+        PageRequest.of(page - 1, PAGE_SIZE, Sort.by("createdAt").descending()))))
+        .thenReturn(detectionLogs.subList(0, PAGE_SIZE));
 
     DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
         .memberId(member.getId())
         .total(count)
-        .totalPage((int) Math.ceil((double) count / pageSize))
+        .totalPage((int) Math.ceil((double) count / PAGE_SIZE))
         .page(page)
         .lastPage(false)
         .detectionLogs(detectionLogResList)
@@ -212,7 +212,7 @@ class DetectionLogServiceTest {
   @Test
   public void getDetectionLogsByPage_ReturnLastPage() {
     int page = 2;
-    int count = pageSize * 2 - 1;
+    int count = PAGE_SIZE * 2 - 1;
     List<DetectionLog> detectionLogs = new ArrayList<>();
     List<DetectionLogRes> detectionLogResList = new ArrayList<>();
 
@@ -233,13 +233,13 @@ class DetectionLogServiceTest {
     when(memberService.getLoginMember()).thenReturn(member);
     when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(count);
     when(detectionLogRepository.findByMemberId(eq(member.getId()), eq(
-        PageRequest.of(page - 1, pageSize, Sort.by("createdAt").descending()))))
-        .thenReturn(detectionLogs.subList(pageSize, count));
+        PageRequest.of(page - 1, PAGE_SIZE, Sort.by("createdAt").descending()))))
+        .thenReturn(detectionLogs.subList(PAGE_SIZE, count));
 
     DetectionLogPageRes detectionLogPageRes = DetectionLogPageRes.builder()
         .memberId(member.getId())
         .total(count)
-        .totalPage((int) Math.ceil((double) count / pageSize))
+        .totalPage((int) Math.ceil((double) count / PAGE_SIZE))
         .page(page)
         .lastPage(true)
         .detectionLogs(detectionLogResList)
@@ -254,17 +254,7 @@ class DetectionLogServiceTest {
   @Test
   public void getDetectionLogsByPage_ReturnPageZero() {
     int page = 0;
-    int count = pageSize;
-    List<DetectionLog> detectionLogs = new ArrayList<>();
-
-    for (int i = 1; i <= count; i++) {
-      Medicine med = Medicine.builder().id(i).code(Integer.toString(i)).name("a").company("a")
-          .ingredient("a").image("a").effect("a").usages("a").precautions("a").build();
-      DetectionLog detLog = detectionLog.builder().id(i).member(member).medicine(med).build();
-      detLog.setCreatedAt(time);
-      detLog.setUpdatedAt(time);
-      detectionLogs.add(detLog);
-    }
+    int count = PAGE_SIZE;
 
     when(memberService.getLoginMember()).thenReturn(member);
     when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(count);
@@ -276,17 +266,7 @@ class DetectionLogServiceTest {
   @Test
   public void getDetectionLogsByPage_ReturnLastPageNext() {
     int page = 2;
-    int count = pageSize;
-    List<DetectionLog> detectionLogs = new ArrayList<>();
-
-    for (int i = 1; i <= count; i++) {
-      Medicine med = Medicine.builder().id(i).code(Integer.toString(i)).name("a").company("a")
-          .ingredient("a").image("a").effect("a").usages("a").precautions("a").build();
-      DetectionLog detLog = DetectionLog.builder().id(i).member(member).medicine(med).build();
-      detLog.setCreatedAt(time);
-      detLog.setUpdatedAt(time);
-      detectionLogs.add(detLog);
-    }
+    int count = PAGE_SIZE;
 
     when(memberService.getLoginMember()).thenReturn(member);
     when(detectionLogRepository.countByMemberId(member.getId())).thenReturn(count);

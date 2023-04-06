@@ -1,5 +1,8 @@
 package pocketyacsa.server.common.exception.handler;
 
+import static org.springframework.http.HttpStatus.*;
+
+import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -15,7 +18,7 @@ public class GlobalExceptionHandlers {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorResponse> handlerMethodArgumentNotValidException(
       MethodArgumentNotValidException e) {
-    ErrorResponse errorResponse = new ErrorResponse("VALIDATION_ERROR", HttpStatus.BAD_REQUEST,
+    ErrorResponse errorResponse = new ErrorResponse("VALIDATION_ERROR", BAD_REQUEST,
         e.getBindingResult().getAllErrors().get(0).getDefaultMessage());
     return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
   }
@@ -25,5 +28,13 @@ public class GlobalExceptionHandlers {
     ErrorResponse errorResponse = e.getErrorResponse();
     HttpStatus httpStatus = errorResponse.getHttpStatus();
     return new ResponseEntity<>(errorResponse, httpStatus);
+  }
+
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ErrorResponse> handlerConstraintViolationException(
+      ConstraintViolationException e) {
+    String message = e.getConstraintViolations().iterator().next().getMessage();
+    ErrorResponse errorResponse = new ErrorResponse("VALIDATION_EXCEPTION", BAD_REQUEST, message);
+    return new ResponseEntity<>(errorResponse, errorResponse.getHttpStatus());
   }
 }
