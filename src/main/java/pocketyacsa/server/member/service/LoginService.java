@@ -1,7 +1,6 @@
 package pocketyacsa.server.member.service;
 
 
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class LoginService implements OAuth2UserService {
 
   private final MemberService memberService;
-  private final HttpSession httpSession;
 
   /**
    * OAuth2 로그인을 한 사용자가 회원가입이 되어있지 않으면 회원가입을 진행합니다.
