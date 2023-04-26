@@ -8,12 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pocketyacsa.server.common.exception.handler.CommonResponse;
-import pocketyacsa.server.medicine.domain.redisValue.SearchLogRedis;
 import pocketyacsa.server.medicine.domain.response.MedicineRes;
 import pocketyacsa.server.medicine.domain.response.MedicineSearchPageRes;
 import pocketyacsa.server.medicine.service.MedicineSearchService;
@@ -92,19 +90,19 @@ public class MedicineController {
    * @return 최근 검색기록들
    */
   @GetMapping("/search/logs")
-  public List<SearchLogRedis> getMedicineSearchLogs() {
+  public List<String> getMedicineSearchLogs() {
     return medicineSearchService.getRecentSearchLogs();
   }
 
   /**
    * 특정 검색기록을 삭제합니다.
    *
-   * @param searchLogRedis 검색기록 정보
+   * @param index 검색기록내의 index
    * @return 검색기록 삭제 여부
    */
   @DeleteMapping("/search/logs")
-  public ResponseEntity<Object> deleteLog(@RequestBody SearchLogRedis searchLogRedis) {
-    medicineSearchService.deleteRecentSearchLog(searchLogRedis);
+  public ResponseEntity<Object> deleteLog(@RequestParam int index) {
+    medicineSearchService.deleteRecentSearchLog(index);
     CommonResponse response =
         new CommonResponse("DELETE_SEARCH_LOG_SUCCESS", OK, "검색기록 삭제 성공");
     return new ResponseEntity<>(response, response.getHttpStatus());
@@ -115,7 +113,7 @@ public class MedicineController {
    *
    * @return 검색기록 삭제 여부
    */
-  @GetMapping("/search/logs/all")
+  @DeleteMapping("/search/logs/all")
   public ResponseEntity<Object> deleteLogs() {
     medicineSearchService.deleteRecentSearchLogs();
     CommonResponse response =
