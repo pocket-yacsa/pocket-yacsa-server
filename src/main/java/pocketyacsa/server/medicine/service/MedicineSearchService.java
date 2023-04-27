@@ -15,7 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import pocketyacsa.server.common.exception.BadRequestException;
-import pocketyacsa.server.medicine.domain.entity.MedicineSearch;
+import pocketyacsa.server.medicine.domain.response.MedicineSearch;
 import pocketyacsa.server.medicine.domain.response.MedicineSearchPageRes;
 import pocketyacsa.server.medicine.repository.MedicineSearchRepository;
 import pocketyacsa.server.member.entity.Member;

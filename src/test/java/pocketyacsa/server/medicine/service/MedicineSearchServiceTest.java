@@ -15,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import pocketyacsa.server.common.exception.BadRequestException;
-import pocketyacsa.server.medicine.domain.entity.MedicineSearch;
+import pocketyacsa.server.medicine.domain.response.MedicineSearch;
 import pocketyacsa.server.medicine.domain.redisValue.SearchLogRedis;
 import pocketyacsa.server.medicine.domain.response.MedicineSearchPageRes;
 import pocketyacsa.server.medicine.repository.MedicineSearchRepository;
