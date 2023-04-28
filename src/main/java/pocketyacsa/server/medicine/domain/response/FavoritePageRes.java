@@ -15,23 +15,23 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class FavoritePageRes {
 
-  @Schema(description = "회원의 id", defaultValue = "1")
+  @Schema(description = "회원의 id", example = "1")
   private int memberId;
 
-  @Schema(description = "전체 즐겨찾기 개수", defaultValue = "21")
+  @Schema(description = "전체 즐겨찾기 개수", example = "21")
   private int total;
 
-  @Schema(description = "전체 페이지 개수", defaultValue = "4")
+  @Schema(description = "전체 페이지 개수", example = "4")
   private int totalPage;
 
-  @Schema(description = "현재 페이지 번호", defaultValue = "3")
+  @Schema(description = "현재 페이지 번호", example = "3")
   private int page;
 
-  @Schema(description = "마지막 페이지 여부", defaultValue = "false",
+  @Schema(description = "마지막 페이지 여부", example = "false",
       allowableValues = {"true", "false"})
   private boolean lastPage;
 
-  @Schema(description = "촬영기록", defaultValue = "[\n"
+  @Schema(description = "촬영기록", example = "[\n"
       + "    {\n"
       + "      \"id\": 13,\n"
       + "      \"medicineId\": 42,\n"

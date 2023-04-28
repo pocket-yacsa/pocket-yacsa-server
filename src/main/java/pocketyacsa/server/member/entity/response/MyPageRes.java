@@ -10,12 +10,12 @@ import lombok.Getter;
 @EqualsAndHashCode
 public class MyPageRes {
 
-  @Schema(description = "회원 이름", defaultValue = "Hong GilDong")
+  @Schema(description = "회원 이름", example = "Hong GilDong")
   private String memberName;
 
-  @Schema(description = "촬영기록 개수", defaultValue = "15")
+  @Schema(description = "촬영기록 개수", example = "15")
   private int detectionLogCount;
 
-  @Schema(description = "즐겨찾기 개수", defaultValue = "42")
+  @Schema(description = "즐겨찾기 개수", example = "42")
   private int favoriteCount;
 }

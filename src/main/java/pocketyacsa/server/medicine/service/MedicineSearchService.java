@@ -154,6 +154,9 @@ public class MedicineSearchService {
     Member loginMember = memberService.getLoginMember();
     String key = searchLogKey(loginMember.getId());
     String value = redisTemplate.opsForList().index(key, index);
+    if(value == null){
+      throw new BadRequestException(SEARCH_LOG_NOT_EXIST.getErrorResponse());
+    }
     long count = redisTemplate.opsForList().remove(key, index, value);
 
     if (count == 0) {

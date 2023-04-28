@@ -15,20 +15,20 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode
 public class MedicineSearchPageRes {
 
-  @Schema(description = "전체 검색기록 개수", defaultValue = "21")
+  @Schema(description = "전체 검색기록 개수", example = "21")
   private int total;
 
-  @Schema(description = "전체 페이지 개수", defaultValue = "4")
+  @Schema(description = "전체 페이지 개수", example = "4")
   private int totalPage;
 
-  @Schema(description = "현재 페이지 번호", defaultValue = "3")
+  @Schema(description = "현재 페이지 번호", example = "3")
   private int page;
 
-  @Schema(description = "마지막 페이지 여부", defaultValue = "false",
+  @Schema(description = "마지막 페이지 여부", example = "false",
       allowableValues = {"true", "false"})
   private boolean lastPage;
 
-  @Schema(description = "검색결과", defaultValue = "[\n"
+  @Schema(description = "검색결과", example = "[\n"
       + "    {\n"
       + "      \"id\": 5844,\n"
       + "      \"name\": \"타미플루캡슐30밀리그램(인산오셀타미비르)\",\n"

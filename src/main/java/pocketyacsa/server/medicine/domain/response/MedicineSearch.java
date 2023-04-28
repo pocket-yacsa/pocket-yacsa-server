@@ -12,13 +12,13 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @EqualsAndHashCode
 public class MedicineSearch {
 
-  @Schema(description = "의약품의 id", defaultValue = "1")
+  @Schema(description = "의약품의 id", example = "1")
   private int id;
 
-  @Schema(description = "의약품의 이름", defaultValue = "타미플루")
+  @Schema(description = "의약품의 이름", example = "타미플루")
   private String name;
 
-  @Schema(description = "제약회사", defaultValue = "화이자")
+  @Schema(description = "제약회사", example = "화이자")
   private String company;
 
   @Schema(description = "의약품 이미지 주소",

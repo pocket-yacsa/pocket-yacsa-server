@@ -1,6 +1,7 @@
 package pocketyacsa.server.medicine.service;
 
 import org.springframework.web.multipart.MultipartFile;
+import pocketyacsa.server.medicine.domain.response.MedicineRes;
 
 public interface DetectionService {
 
@@ -10,6 +11,6 @@ public interface DetectionService {
    * @param image 의약품 사진
    * @return image에 해당하는 medicine id
    */
-  public int detect(MultipartFile image);
+  public MedicineRes detect(MultipartFile image);
 
 }

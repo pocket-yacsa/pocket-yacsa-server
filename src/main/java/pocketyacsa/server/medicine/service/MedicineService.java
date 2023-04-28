@@ -65,10 +65,10 @@ public class MedicineService {
    * @param id medicine의 id
    * @return
    */
-  public MedicineRes getMedicineDtoById(int id) {
+  public MedicineRes getMedicineResById(int id) {
     Medicine medicine = getMedicineById(id);
 
-    MedicineRes medicineDto = MedicineRes.builder()
+    MedicineRes medicineRes = MedicineRes.builder()
         .id(medicine.getId())
         .code(medicine.getCode())
         .name(medicine.getName())
@@ -80,7 +80,7 @@ public class MedicineService {
         .precautions(medicine.getPrecautions())
         .build();
 
-    return medicineDto;
+    return medicineRes;
   }
 
   /**
@@ -89,10 +89,10 @@ public class MedicineService {
    * @param code medicine의 code
    * @return
    */
-  public MedicineRes getMedicineDtoByCode(String code) {
+  public MedicineRes getMedicineResByCode(String code) {
     Medicine medicine = getMedicineByCode(code);
 
-    MedicineRes medicineDto = MedicineRes.builder()
+    MedicineRes medicineRes = MedicineRes.builder()
         .id(medicine.getId())
         .code(medicine.getCode())
         .name(medicine.getName())
@@ -104,6 +104,6 @@ public class MedicineService {
         .precautions(medicine.getPrecautions())
         .build();
 
-    return medicineDto;
+    return medicineRes;
   }
 }
