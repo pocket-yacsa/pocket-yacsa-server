@@ -103,7 +103,7 @@ class MedicineServiceTest {
   public void getMedicineDtoById_Success() {
     Mockito.when(medicineRepository.findById(1)).thenReturn(Optional.ofNullable(medicine));
 
-    MedicineRes result = medicineService.getMedicineDtoById(1);
+    MedicineRes result = medicineService.getMedicineResById(1);
 
     assertEquals(result, medicineDto);
   }
@@ -112,7 +112,7 @@ class MedicineServiceTest {
   public void getMedicineDtoById_NotExist() {
     Mockito.when(medicineRepository.findById(1)).thenReturn(Optional.empty());
 
-    assertThrows(BadRequestException.class, () -> medicineService.getMedicineDtoById(1));
+    assertThrows(BadRequestException.class, () -> medicineService.getMedicineResById(1));
   }
 
   @Test
@@ -120,7 +120,7 @@ class MedicineServiceTest {
     Mockito.when(medicineRepository.findByCode("1234512345"))
         .thenReturn(Optional.ofNullable(medicine));
 
-    MedicineRes result = medicineService.getMedicineDtoByCode("1234512345");
+    MedicineRes result = medicineService.getMedicineResByCode("1234512345");
 
     assertEquals(result, medicineDto);
   }
@@ -130,7 +130,7 @@ class MedicineServiceTest {
     Mockito.when(medicineRepository.findByCode("1234512345")).thenReturn(Optional.empty());
 
     assertThrows(BadRequestException.class,
-        () -> medicineService.getMedicineDtoByCode("1234512345"));
+        () -> medicineService.getMedicineResByCode("1234512345"));
   }
 
 }

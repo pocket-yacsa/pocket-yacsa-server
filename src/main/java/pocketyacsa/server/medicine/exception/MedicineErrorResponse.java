@@ -21,6 +21,8 @@ public enum MedicineErrorResponse {
       of("KEYWORD_NOT_EXIST", BAD_REQUEST, "검색어를 입력해주세요.")),
   SEARCH_LOG_NOT_EXIST(
       of("SEARCH_LOG_NOT_EXIST", BAD_REQUEST, "검색기록이 존재하지 않습니다.")),
+  MEDICINE_NOT_DETECT(
+      of("MEDICINE_NOT_DETECT", BAD_REQUEST, "의약품을 탐지하지 못했습니다.")),
 
   // 403 FORBIDDEN
   FAVORITE_NO_PERMISSION(
