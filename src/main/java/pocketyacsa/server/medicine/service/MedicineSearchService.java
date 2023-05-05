@@ -8,13 +8,15 @@ import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.PAGE_O
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.SEARCH_LOG_NOT_EXIST;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.SEARCH_RESULT_NOT_EXIST;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import pocketyacsa.server.common.exception.BadRequestException;
+import pocketyacsa.server.medicine.domain.redisValue.SearchLogRedis;
 import pocketyacsa.server.medicine.domain.response.MedicineSearch;
 import pocketyacsa.server.medicine.domain.response.MedicineSearchPageRes;
 import pocketyacsa.server.medicine.repository.MedicineSearchRepository;
@@ -27,7 +29,7 @@ public class MedicineSearchService {
 
   private final MedicineSearchRepository repository;
   private final MemberService memberService;
-  private final StringRedisTemplate redisTemplate;
+  private final RedisTemplate<String, SearchLogRedis> redisTemplate;
 
   /**
    * 특정 name의 medicine 검색결과를 반환합니다. page를 넘겨줌으로써 특정 페이지의 정보로 제공됩니다.
@@ -63,38 +65,6 @@ public class MedicineSearchService {
   }
 
   /**
-   * 특정 name의 medicine 검색결과의 첫번째 페이지를 반환합니다. 이 때 검색기록에 추가됩니다.
-   *
-   * @param name 의약품 검색어
-   * @return name으로 검색한 첫번째 결과
-   */
-  public MedicineSearchPageRes getMedicineSearchAtFist(String name) {
-    if (name.isEmpty()) {
-      throw new BadRequestException(KEYWORD_NOT_EXIST.getErrorResponse());
-    }
-
-    saveRecentSearchLog(name);
-
-    int totalSize = repository.countByName(name);
-    int totalPages = (int) Math.ceil((double) totalSize / PAGE_SIZE);
-
-    if (totalSize == 0) {
-      throw new BadRequestException(SEARCH_RESULT_NOT_EXIST.getErrorResponse());
-    }
-
-    List<MedicineSearch> searchResults = repository.findByName(name,
-        PageRequest.of(0, PAGE_SIZE));
-
-    boolean lastPage = (totalPages == 1);
-
-    MedicineSearchPageRes response = MedicineSearchPageRes.builder().total(totalSize)
-        .totalPage(totalPages).page(1)
-        .lastPage(lastPage).medicineSearchList(searchResults).build();
-
-    return response;
-  }
-
-  /**
    * 특정 검색어와 연관도가 높은 검색어를 최대 10개까지 반환합니다.
    *
    * @param name 의약품 검색어
@@ -120,8 +90,13 @@ public class MedicineSearchService {
    */
   public void saveRecentSearchLog(String name) {
     Member loginMember = memberService.getLoginMember();
+    String now = LocalDateTime.now().toString();
+
     String key = searchLogKey(loginMember.getId());
-    String value = name;
+    SearchLogRedis value = SearchLogRedis.builder().
+        name(name).
+        createdAt(now).
+        build();
 
     Long size = redisTemplate.opsForList().size(key);
     if (size == (long) RECENT_KEYWORD_SIZE) {
@@ -136,10 +111,10 @@ public class MedicineSearchService {
    *
    * @return 최근 검색기록들
    */
-  public List<String> getRecentSearchLogs() {
+  public List<SearchLogRedis> getRecentSearchLogs() {
     Member loginMember = memberService.getLoginMember();
     String key = searchLogKey(loginMember.getId());
-    List<String> logs = redisTemplate.opsForList().
+    List<SearchLogRedis> logs = redisTemplate.opsForList().
         range(key, 0, RECENT_KEYWORD_SIZE);
 
     return logs;
@@ -148,16 +123,18 @@ public class MedicineSearchService {
   /**
    * 특정 인덱스의 검색기록을 삭제합니다.
    *
-   * @param index 검색기록의 index
+   * @param name      검색어
+   * @param createdAt 검색일자
    */
-  public void deleteRecentSearchLog(int index) {
+  public void deleteRecentSearchLog(String name, String createdAt) {
     Member loginMember = memberService.getLoginMember();
     String key = searchLogKey(loginMember.getId());
-    String value = redisTemplate.opsForList().index(key, index);
-    if(value == null){
-      throw new BadRequestException(SEARCH_LOG_NOT_EXIST.getErrorResponse());
-    }
-    long count = redisTemplate.opsForList().remove(key, index, value);
+    SearchLogRedis value = SearchLogRedis.builder()
+        .name(name)
+        .createdAt(createdAt)
+        .build();
+
+    long count = redisTemplate.opsForList().remove(key, 1, value);
 
     if (count == 0) {
       throw new BadRequestException(SEARCH_LOG_NOT_EXIST.getErrorResponse());
