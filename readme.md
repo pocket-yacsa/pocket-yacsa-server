@@ -1,6 +1,9 @@
 # 💊 포켓약사
 시각장애인을 위한 의약품을 촬영하면 의약품 정보를 제공해주는 서비스
 
+## Swagger 명세서
+- https://pocketyacsa.shop/swagger-ui.html
+
 ## 📌 인프라 구조
 <img width="600" alt="image" src="https://user-images.githubusercontent.com/35839248/230784876-4aefe9a5-513d-47fc-9bb3-bb17bbf90eae.png">
 
