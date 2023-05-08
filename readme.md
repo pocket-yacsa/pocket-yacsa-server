@@ -5,7 +5,7 @@
 - https://pocketyacsa.shop/swagger-ui.html
 
 ## 📌 인프라 구조
-<img width="600" alt="image" src="https://user-images.githubusercontent.com/35839248/230784876-4aefe9a5-513d-47fc-9bb3-bb17bbf90eae.png">
+<img width="600" alt="image" src="https://user-images.githubusercontent.com/35839248/236770427-f40e9767-f67d-4e98-b2dc-473e376fb8db.png">
 
 ## 📌 ERD
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/35839248/230785036-e4551c00-5cf8-48da-8327-1fef216f9f60.png">
