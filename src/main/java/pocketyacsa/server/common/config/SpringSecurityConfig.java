@@ -29,11 +29,18 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         .anyRequest()
         .authenticated()
         .and()
+        .cors()
+        .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+        .logoutSuccessUrl("http://localhost:3000")
+        .and()
+        .formLogin()
+        .loginPage("http://localhost:3000")
         .and()
         .csrf().disable()
         .oauth2Login()
+        .defaultSuccessUrl("http://localhost:3000/camera", true)
         .authorizationEndpoint()
         .baseUri("/oauth2/login")
         .and()
@@ -45,7 +52,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
 
-    configuration.addAllowedOrigin("*");
+    configuration.addAllowedOrigin("http://localhost:3000");
+    configuration.addAllowedOrigin("https://pocketyacsa.shop");
     configuration.addAllowedHeader("*");
     configuration.addAllowedMethod("*");
     configuration.setAllowCredentials(true);
