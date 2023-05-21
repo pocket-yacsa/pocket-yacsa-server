@@ -20,6 +20,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
   private final OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService;
+  private final MyAuthenticationEntryPoint authenticationEntryPoint;
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -29,14 +30,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         .anyRequest()
         .authenticated()
         .and()
+        .exceptionHandling()
+        .authenticationEntryPoint(authenticationEntryPoint)
+        .and()
         .cors()
         .and()
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
         .logoutSuccessUrl("http://localhost:3000")
-        .and()
-        .formLogin()
-        .loginPage("http://localhost:3000")
         .and()
         .csrf().disable()
         .oauth2Login()
