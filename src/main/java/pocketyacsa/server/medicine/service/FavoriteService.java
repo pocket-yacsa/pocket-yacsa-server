@@ -1,10 +1,9 @@
 package pocketyacsa.server.medicine.service;
 
 import static pocketyacsa.server.common.utility.Constant.PAGE_SIZE;
-import static pocketyacsa.server.common.utility.SortDirection.*;
+import static pocketyacsa.server.common.utility.SortDirection.ASCENDING;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.FAVORITE_ALREADY_EXIST;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.FAVORITE_NOT_EXIST;
-import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.FAVORITE_NO_PERMISSION;
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.PAGE_OUT_OF_RANGE;
 
 import java.util.List;
@@ -85,17 +84,18 @@ public class FavoriteService {
   /**
    * favorite을 삭제합니다.
    *
-   * @param id 삭제할 favorite의 id
+   * @param medicineId 즐겨찾기에서 삭제할 medicine의 id
    */
-  public void delete(int id) {
-    Favorite favorite = getFavoriteById(id);
+  @Transactional
+  public void delete(int medicineId) {
     Member loginMember = memberService.getLoginMember();
+    boolean isFavorite = existsByMemberIdAndMedicineId(loginMember.getId(), medicineId);
 
-    if (favorite.getMember().getId() != loginMember.getId()) {
-      throw new BadRequestException(FAVORITE_NO_PERMISSION.getErrorResponse());
+    if (!isFavorite) {
+      throw new BadRequestException(FAVORITE_NOT_EXIST.getErrorResponse());
     }
 
-    repository.deleteById(favorite.getId());
+    repository.deleteByMemberIdAndMedicineId(loginMember.getId(), medicineId);
   }
 
   /**
