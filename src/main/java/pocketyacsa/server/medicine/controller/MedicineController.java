@@ -59,39 +59,14 @@ public class MedicineController {
   }
 
   /**
-   * 특정 code의 medicine을 반환합니다.
-   *
-   * @param code medicine의 code
-   * @return 특정 code의 medicine
-   */
-  @Operation(summary = "의약품 code를 이용하여 의약품 정보 조회",
-      description = "의약품 고유값인 code를 이용하여 의약품 정보를 조회합니다.")
-  @ApiResponses({
-      @ApiResponse(responseCode = "200", description = "의약품 조회 성공"),
-      @ApiResponse(responseCode = "404 (MEDICINE_NOT_EXIST)", description = "의약품 정보 없음",
-          content = @Content(schema = @Schema(
-              example = "{\n"
-                  + "  \"name\": \"MEDICINE_NOT_EXIST\",\n"
-                  + "  \"httpStatus\": \"NOT_FOUND\",\n"
-                  + "  \"message\": \"의약품이 존재하지 않습니다.\"\n"
-                  + "}")))
-  })
-  @GetMapping("/code/{code}")
-  public MedicineRes getMedicineByCode(@PathVariable String code) {
-    MedicineRes medicine = medicineService.getMedicineResByCode(code);
-    return medicine;
-  }
-
-  /**
    * 특정 name의 medicine 검색결과를 반환합니다. page를 넘겨줌으로써 특정 페이지의 정보로 제공됩니다.
    *
    * @param name 의약품 검색어
    * @param page 검색결과 페이지
    * @return 특정 page의 name으로 검색한 결과
    */
-  @Operation(summary = "의약품 검색 후 다른 결과 페이지 조회",
-      description = "의약품 검색을 통해 첫번째 페이지를 반환 받은 후 추가적인 검색기록을 확인하기 위해서 사용합니다. "
-          + "이 때는 검색기록에 추가되지 않습니다.")
+  @Operation(summary = "의약품 검색",
+      description = "의약품을 검색합니다. 이 API만 이용해서는 최근검색어에 추가되지 않습니다.")
   @ApiResponses({
       @ApiResponse(responseCode = "200", description = "의약품 조회 성공"),
       @ApiResponse(responseCode = "400 (KEYWORD_NOT_EXIST)", description = "검색어가 없음",

@@ -10,13 +10,18 @@ import org.springframework.stereotype.Service;
 import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.entity.Medicine;
 import pocketyacsa.server.medicine.domain.response.MedicineRes;
+import pocketyacsa.server.medicine.repository.FavoriteRepository;
 import pocketyacsa.server.medicine.repository.MedicineRepository;
+import pocketyacsa.server.member.entity.Member;
+import pocketyacsa.server.member.service.MemberService;
 
 @Service
 @RequiredArgsConstructor
 public class MedicineService {
 
+  private final MemberService memberService;
   private final MedicineRepository repository;
+  private final FavoriteRepository favoriteRepository;
 
   /**
    * 특정 id의 medicine을 반환합니다.
@@ -66,7 +71,10 @@ public class MedicineService {
    * @return
    */
   public MedicineRes getMedicineResById(int id) {
+    Member member = memberService.getLoginMember();
     Medicine medicine = getMedicineById(id);
+    boolean isFavorite =
+        favoriteRepository.existsByMemberIdAndMedicineId(member.getId(), medicine.getId());
 
     MedicineRes medicineRes = MedicineRes.builder()
         .id(medicine.getId())
@@ -78,30 +86,7 @@ public class MedicineService {
         .effect(medicine.getEffect())
         .usages(medicine.getUsages())
         .precautions(medicine.getPrecautions())
-        .build();
-
-    return medicineRes;
-  }
-
-  /**
-   * 특정 id의 클라이언트에게 전달할 Medicine 정보를 반환합니다.
-   *
-   * @param code medicine의 code
-   * @return
-   */
-  public MedicineRes getMedicineResByCode(String code) {
-    Medicine medicine = getMedicineByCode(code);
-
-    MedicineRes medicineRes = MedicineRes.builder()
-        .id(medicine.getId())
-        .code(medicine.getCode())
-        .name(medicine.getName())
-        .company(medicine.getCompany())
-        .ingredient(getIngredientList(medicine.getIngredient()))
-        .image(medicine.getImage())
-        .effect(medicine.getEffect())
-        .usages(medicine.getUsages())
-        .precautions(medicine.getPrecautions())
+        .isFavorite(isFavorite)
         .build();
 
     return medicineRes;

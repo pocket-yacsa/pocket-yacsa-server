@@ -54,5 +54,5 @@ public class MedicineSearchPageRes {
       + "      \"image\": \"https://kr.object.ncloudstorage.com/yacsa/medicine-image/img_not-exist.jpg\"\n"
       + "    }\n"
       + "  ]")
-  private List<MedicineSearch> medicineSearchList;
+  private List<MedicineSearchRes> medicineSearchList;
 }

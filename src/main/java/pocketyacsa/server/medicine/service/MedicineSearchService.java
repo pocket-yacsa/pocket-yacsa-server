@@ -9,6 +9,7 @@ import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.SEARCH
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.SEARCH_RESULT_NOT_EXIST;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.redisValue.SearchLogRedis;
 import pocketyacsa.server.medicine.domain.response.MedicineSearch;
 import pocketyacsa.server.medicine.domain.response.MedicineSearchPageRes;
+import pocketyacsa.server.medicine.domain.response.MedicineSearchRes;
 import pocketyacsa.server.medicine.repository.MedicineSearchRepository;
 import pocketyacsa.server.member.entity.Member;
 import pocketyacsa.server.member.service.MemberService;
@@ -30,6 +32,7 @@ public class MedicineSearchService {
   private final MedicineSearchRepository repository;
   private final MemberService memberService;
   private final RedisTemplate<String, SearchLogRedis> redisTemplate;
+  private final FavoriteService favoriteService;
 
   /**
    * 특정 name의 medicine 검색결과를 반환합니다. page를 넘겨줌으로써 특정 페이지의 정보로 제공됩니다.
@@ -39,6 +42,7 @@ public class MedicineSearchService {
    * @return 특정 page의 name으로 검색한 결과
    */
   public MedicineSearchPageRes getMedicineSearchesByNameAndPage(String name, int page) {
+    Member member = memberService.getLoginMember();
     if (name.isEmpty()) {
       throw new BadRequestException(KEYWORD_NOT_EXIST.getErrorResponse());
     }
@@ -55,11 +59,26 @@ public class MedicineSearchService {
     List<MedicineSearch> searchResults = repository.findByName(name,
         PageRequest.of(page - 1, PAGE_SIZE));
 
+    List<MedicineSearchRes> searchResponse = new ArrayList<>();
+
+    for (MedicineSearch medicine : searchResults) {
+      MedicineSearchRes medicineSearch = MedicineSearchRes.builder()
+          .id(medicine.getId())
+          .name(medicine.getName())
+          .company(medicine.getCompany())
+          .image(medicine.getImage())
+          .isFavorite(
+              favoriteService.existsByMemberIdAndMedicineId(member.getId(), medicine.getId()))
+          .build();
+
+      searchResponse.add(medicineSearch);
+    }
+
     boolean lastPage = (page == totalPages);
 
     MedicineSearchPageRes response = MedicineSearchPageRes.builder().total(totalSize)
         .totalPage(totalPages).page(page)
-        .lastPage(lastPage).medicineSearchList(searchResults).build();
+        .lastPage(lastPage).medicineSearchList(searchResponse).build();
 
     return response;
   }
