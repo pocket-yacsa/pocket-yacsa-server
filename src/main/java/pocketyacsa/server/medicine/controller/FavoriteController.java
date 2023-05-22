@@ -78,7 +78,7 @@ public class FavoriteController {
   /**
    * 특정 id의 favorite을 삭제합니다.
    *
-   * @param favoriteId 삭제할 favorite의 id
+   * @param medicineId 즐겨찾기에서 삭제할 medicine의 id
    * @return favorite 삭제 성공 여부
    */
   @Operation(summary = "특정 의약품을 즐겨찾기에서 삭제",
@@ -114,8 +114,8 @@ public class FavoriteController {
                   + "}")))
   })
   @DeleteMapping
-  public ResponseEntity<Object> delete(@RequestParam int favoriteId) {
-    favoriteService.delete(favoriteId);
+  public ResponseEntity<Object> delete(@RequestParam int medicineId) {
+    favoriteService.delete(medicineId);
     CommonResponse response =
         new CommonResponse("DELETE_FAVORITE_SUCCESS", OK, "즐겨찾기 삭제 성공");
     return new ResponseEntity<>(response, response.getHttpStatus());
