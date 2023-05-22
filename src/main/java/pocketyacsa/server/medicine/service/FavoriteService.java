@@ -144,6 +144,7 @@ public class FavoriteService {
             .medicineCompany(favorite.getMedicine().getCompany())
             .medicineImage(favorite.getMedicine().getImage())
             .createdAt(favorite.getCreatedAt())
+            .isFavorite(true)
             .build())
         .collect(Collectors.toList());
 

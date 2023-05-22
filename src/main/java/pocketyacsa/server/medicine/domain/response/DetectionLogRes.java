@@ -33,4 +33,7 @@ public class DetectionLogRes {
 
   @Schema(description = "즐겨찾기 추가 시간", example = "2023-04-02T17:25:44")
   private LocalDateTime createdAt;
+
+  @Schema(description = "즐겨찾기 여부", example = "false")
+  private boolean isFavorite;
 }

@@ -47,4 +47,7 @@ public class MedicineRes {
 
   @Schema(description = "의약품의 주의사항", example = "공복에 복용하지 마세요")
   private String precautions;
+
+  @Schema(description = "즐겨찾기 여부", example = "false")
+  private boolean isFavorite;
 }

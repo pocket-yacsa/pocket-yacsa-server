@@ -39,6 +39,7 @@ public class FavoritePageRes {
       + "      \"medicineCompany\": \"한국유니온제약(주)\",\n"
       + "      \"medicineImage\": \"https://kr.object.ncloudstorage.com/yacsa/medicine-image/img_not-exist.jpg\",\n"
       + "      \"createdAt\": \"2023-04-02T17:25:37\"\n"
+      + "      \"favorite\": true\n"
       + "    },\n"
       + "    {\n"
       + "      \"id\": 14,\n"
@@ -47,6 +48,7 @@ public class FavoritePageRes {
       + "      \"medicineCompany\": \"영진약품(주)\",\n"
       + "      \"medicineImage\": \"https://kr.object.ncloudstorage.com/yacsa/medicine-image/img_not-exist.jpg\",\n"
       + "      \"createdAt\": \"2023-04-02T17:25:44\"\n"
+      + "      \"favorite\": true\n"
       + "    },\n"
       + "    {\n"
       + "      \"id\": 15,\n"
@@ -55,6 +57,7 @@ public class FavoritePageRes {
       + "      \"medicineCompany\": \"(주)굿윌스\",\n"
       + "      \"medicineImage\": \"https://kr.object.ncloudstorage.com/yacsa/medicine-image/img_not-exist.jpg\",\n"
       + "      \"createdAt\": \"2023-04-02T17:25:48\"\n"
+      + "      \"favorite\": true\n"
       + "    }\n"
       + "  ]")
   private List<FavoriteRes> favorites;

@@ -10,7 +10,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 @Getter
 @Builder
 @EqualsAndHashCode
-public class MedicineSearch {
+public class MedicineSearchRes {
 
   @Schema(description = "의약품의 id", example = "1")
   private int id;
@@ -25,4 +25,6 @@ public class MedicineSearch {
       defaultValue = "https://kr.object.ncloudstorage.com/yacsa/medicine-image/img_not-exist.jpg")
   private String image;
 
+  @Schema(description = "즐겨찾기 여부", example = "false")
+  private boolean isFavorite;
 }

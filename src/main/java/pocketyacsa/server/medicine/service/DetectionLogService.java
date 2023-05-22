@@ -31,6 +31,7 @@ public class DetectionLogService {
   private final DetectionLogRepository repository;
   private final MemberService memberService;
   private final MedicineService medicineService;
+  private final FavoriteService favoriteService;
 
   /**
    * 로그인한 사용자가 촬영하고 정보를 조회한 의약품을 저장합니다.
@@ -126,6 +127,8 @@ public class DetectionLogService {
             .medicineCompany(detectionLog.getMedicine().getCompany())
             .medicineImage(detectionLog.getMedicine().getImage())
             .createdAt(detectionLog.getCreatedAt())
+            .isFavorite(favoriteService.existsByMemberIdAndMedicineId(loginMember.getId(),
+                detectionLog.getMedicine().getId()))
             .build())
         .collect(Collectors.toList());
 
