@@ -5,7 +5,6 @@ import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.MEDICI
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -21,7 +20,6 @@ import pocketyacsa.server.medicine.domain.request.DetectionReq;
 import pocketyacsa.server.medicine.domain.response.MedicineRes;
 
 @Service
-@Primary
 public class AIDetectionService implements DetectionService {
 
   private final DetectionLogService detectionLogService;
