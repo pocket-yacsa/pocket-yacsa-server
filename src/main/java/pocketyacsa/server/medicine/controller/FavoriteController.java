@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,9 +22,11 @@ import pocketyacsa.server.common.exception.handler.CommonResponse;
 import pocketyacsa.server.common.utility.SortDirection;
 import pocketyacsa.server.medicine.domain.response.FavoritePageRes;
 import pocketyacsa.server.medicine.service.FavoriteService;
+
+@CrossOrigin(origins = "https://pocketyacsa.vercel.app")
 @Tag(name = "의약품 즐겨찾기", description = "의약품 즐겨찾기 관련 api 입니다.")
 @RestController
-@RequestMapping("/favorites")
+@RequestMapping("/api/favorites")
 @RequiredArgsConstructor
 public class FavoriteController {
 

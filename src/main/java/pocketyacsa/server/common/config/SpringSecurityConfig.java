@@ -25,9 +25,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-        .antMatchers("/login", "/oauth2/**", "/error")
+        .antMatchers("/api/login", "/api/oauth2/**", "/api/error")
         .permitAll()
-        .anyRequest()
+        .antMatchers("/api/**")
         .authenticated()
         .and()
         .exceptionHandling()
@@ -36,14 +36,20 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         .cors()
         .and()
         .logout()
-        .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-        .logoutSuccessUrl("https://pocketyacsa.vercel.app")
+        .logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
+        .logoutSuccessUrl("/")
         .and()
         .csrf().disable()
         .oauth2Login()
-        .defaultSuccessUrl("https://pocketyacsa.vercel.app/camera", true)
         .authorizationEndpoint()
-        .baseUri("/oauth2/login")
+        .baseUri("/api/login/oauth2/authorize") // 로그인 페이지로 리다이렉션하는 URL 변경
+        .and()
+        .redirectionEndpoint()
+        .baseUri("/api/login/oauth2/code/*") // 인증 코드를 받는 URL 변경
+        .and()
+        .defaultSuccessUrl("/camera", true)
+        .authorizationEndpoint()
+        .baseUri("/api/oauth2/login")
         .and()
         .userInfoEndpoint()
         .userService(oAuth2UserService);

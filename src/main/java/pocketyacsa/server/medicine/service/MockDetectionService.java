@@ -4,14 +4,12 @@ import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.MEDICI
 
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.response.MedicineRes;
 
 @Service
-@Primary
 @RequiredArgsConstructor
 public class MockDetectionService implements DetectionService {
 
