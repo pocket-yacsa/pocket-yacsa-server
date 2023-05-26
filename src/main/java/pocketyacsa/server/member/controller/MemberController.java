@@ -10,15 +10,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pocketyacsa.server.common.exception.handler.CommonResponse;
 import pocketyacsa.server.member.service.MemberService;
 
+@CrossOrigin(origins = "https://pocketyacsa.vercel.app")
 @Tag(name = "회원정보 관리", description = "회원 정보를 관리합니다.")
 @RestController
-@RequestMapping("members")
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 public class MemberController {
 

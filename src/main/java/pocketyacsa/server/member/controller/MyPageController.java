@@ -7,15 +7,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pocketyacsa.server.member.entity.response.MyPageRes;
 import pocketyacsa.server.member.service.ResponseService;
 
+@CrossOrigin(origins = "https://pocketyacsa.vercel.app")
 @Tag(name = "마이페이지 데이터 조회", description = "마이페이지에 필요한 데이터들을 조회합니다.")
 @RestController
-@RequestMapping("/my-page")
+@RequestMapping("/api/my-page")
 @RequiredArgsConstructor
 public class MyPageController {
 

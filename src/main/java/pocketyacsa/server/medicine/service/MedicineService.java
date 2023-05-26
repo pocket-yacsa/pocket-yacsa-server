@@ -2,11 +2,15 @@ package pocketyacsa.server.medicine.service;
 
 import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.MEDICINE_NOT_EXIST;
 
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.entity.Medicine;
 import pocketyacsa.server.medicine.domain.response.MedicineRes;
@@ -83,12 +87,37 @@ public class MedicineService {
         .company(medicine.getCompany())
         .ingredient(getIngredientList(medicine.getIngredient()))
         .image(medicine.getImage())
-        .effect(medicine.getEffect())
-        .usages(medicine.getUsages())
-        .precautions(medicine.getPrecautions())
+        .effect(getHtmlString("/EE", medicine.getCode()))
+        .usages(getHtmlString("/UD", medicine.getCode()))
+        .precautions(getHtmlString("/NB", medicine.getCode()))
         .isFavorite(isFavorite)
         .build();
 
     return medicineRes;
+  }
+
+  /**
+   * 의약품 html 다운로드 링크에서 받은 html파일을 String으로 반환합니다.
+   *
+   * @param suffix url code 뒷부분
+   * @param code   medicine의 code
+   * @return 의약품 정보의 html 문자열
+   */
+  public String getHtmlString(String suffix, String code) {
+    try {
+      String htmlURL =
+          "https://nedrug.mfds.go.kr/pbp/cmn/html/drb/" + code + suffix; // 다운로드할 HTML 파일의 링크
+
+      URL url = new URL(htmlURL);
+      InputStream inputStream = new BufferedInputStream(url.openStream());
+
+      // HTML 파일의 내용을 읽어옴
+      byte[] htmlBytes = FileCopyUtils.copyToByteArray(inputStream);
+      String htmlContent = new String(htmlBytes, "UTF-8");
+
+      return htmlContent;
+    } catch (Exception e) {
+      return "";
+    }
   }
 }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,9 +16,10 @@ import org.springframework.web.multipart.MultipartFile;
 import pocketyacsa.server.medicine.domain.response.MedicineRes;
 import pocketyacsa.server.medicine.service.DetectionService;
 
+@CrossOrigin(origins = "https://pocketyacsa.vercel.app")
 @Tag(name = "의약품 촬영", description = "의약품을 촬영하는 API 입니다.")
 @RestController
-@RequestMapping("/detection")
+@RequestMapping("/api/detection")
 @RequiredArgsConstructor
 public class DetectionController {
 

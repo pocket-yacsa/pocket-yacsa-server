@@ -5,6 +5,7 @@ import static pocketyacsa.server.medicine.exception.MedicineErrorResponse.MEDICI
 import java.net.URI;
 import java.net.URISyntaxException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,6 +20,7 @@ import pocketyacsa.server.common.exception.BadRequestException;
 import pocketyacsa.server.medicine.domain.request.DetectionReq;
 import pocketyacsa.server.medicine.domain.response.MedicineRes;
 
+@Primary
 @Service
 public class AIDetectionService implements DetectionService {
 
@@ -64,11 +66,13 @@ public class AIDetectionService implements DetectionService {
 
     DetectionReq detectionReq = response.getBody();
 
-    if (detectionReq.getScores() * 100 < 70) {
+    if (detectionReq.getScores() * 100 < 40) {
       throw new BadRequestException(MEDICINE_NOT_DETECT.getErrorResponse());
     }
 
     MedicineRes medicineRes = medicineService.getMedicineResById(detectionReq.getId());
+
+    detectionLogService.save(medicineRes.getId());
 
     return medicineRes;
   }
