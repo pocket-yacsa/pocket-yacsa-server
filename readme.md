@@ -28,6 +28,7 @@
 - Junit5와 Mockito를 활용한 단위테스트 작성
 - 의약품 조회 로직에 페이징을 적용
 - Swagger를 이용한 API 문서 자동화
+- Nginx와 certbot을 이용하여 Https 환경 구축
 
 ## 📌 사용 기술 및 환경
 - Java 11
