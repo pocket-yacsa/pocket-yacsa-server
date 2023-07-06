@@ -9,10 +9,14 @@
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/35839248/230785036-e4551c00-5cf8-48da-8327-1fef216f9f60.png">
 
 ## 📌 UI
-<img width="700" alt="image" src="https://user-images.githubusercontent.com/35839248/230785442-b1a0a4c1-df45-45de-b6f9-0c416f4a95d8.png">
-<img width="700" alt="image" src="https://user-images.githubusercontent.com/35839248/230785395-7bcb68c4-c5b1-46c9-9ab5-afd1654480ce.png">
-<img width="700" alt="image" src="https://user-images.githubusercontent.com/35839248/230785418-25abef44-082e-4c2c-92ae-b81ab8f285bc.png">
-<img width="700" alt="image" src="https://user-images.githubusercontent.com/35839248/230785430-d38f69c9-b473-481e-888c-ad1c90f9f2c6.png">
+### 의약품 촬영
+<img width="1000" alt="image" src="https://github.com/pocket-yacsa/pocket-yacsa-server/assets/35839248/c794f9f8-2341-43ae-9e07-269a6a083a37">
+
+### 내 서랍 저장
+<img width="1000" alt="image" src="https://github.com/pocket-yacsa/pocket-yacsa-server/assets/35839248/0bcc9176-5d85-4ced-bf8d-8abaf60fa974">
+
+### 의약품 검색
+<img width="1000" alt="image" src="https://github.com/pocket-yacsa/pocket-yacsa-server/assets/35839248/d1bfbc3b-1883-4ef0-825a-32f823193c7b">
 
 
 
