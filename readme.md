@@ -1,9 +1,9 @@
 # 💊 포켓약사
 시각장애인을 위한 의약품을 촬영하면 의약품 정보를 제공해주는 서비스
-https://pocketyacsa.shop
+[발표자료 다운로드](https://drive.google.com/drive/folders/1NaPn1uhjQIofyPXDogXReBNUxxCRvm_B?usp=drive_link)
 
 ## 📌 인프라 구조
-<img width="600" alt="image" src="https://user-images.githubusercontent.com/35839248/236770427-f40e9767-f67d-4e98-b2dc-473e376fb8db.png">
+<img width="762" alt="image" src="https://github.com/pocket-yacsa/pocket-yacsa-server/assets/35839248/6c963dfd-d9ca-48e8-8456-0aa26d1e097b">
 
 ## 📌 ERD
 <img width="500" alt="image" src="https://user-images.githubusercontent.com/35839248/230785036-e4551c00-5cf8-48da-8327-1fef216f9f60.png">
@@ -13,6 +13,7 @@ https://pocketyacsa.shop
 <img width="700" alt="image" src="https://user-images.githubusercontent.com/35839248/230785395-7bcb68c4-c5b1-46c9-9ab5-afd1654480ce.png">
 <img width="700" alt="image" src="https://user-images.githubusercontent.com/35839248/230785418-25abef44-082e-4c2c-92ae-b81ab8f285bc.png">
 <img width="700" alt="image" src="https://user-images.githubusercontent.com/35839248/230785430-d38f69c9-b473-481e-888c-ad1c90f9f2c6.png">
+
 
 
 ## 📌 개발 이슈
